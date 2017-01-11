@@ -1,0 +1,9 @@
+.idea/
+data/
+data/*
+data - Copy/
+data - Copy/*
+node_modules/
+node_modules/*
+libs/utils/logs/
+libs/utils/logs/*
