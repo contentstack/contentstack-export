@@ -13,8 +13,8 @@ var helper = require('../../libs/utils/helper.js');
 
 var localeConfig        = config.modules.locales,
     localesFolderPath   = path.resolve(config.data, localeConfig.dirName),
-    masterFolderPath    = path.resolve(config.data, 'master');
-
+    masterFolderPath    = path.resolve(config.data, 'master'),
+    base_locale         = config.base_locale;
 mkdirp.sync(localesFolderPath);
 mkdirp.sync(masterFolderPath);
 
@@ -32,7 +32,7 @@ function ExportLocales() {
         qs: {
             include_count: true,
             asc: 'updated_at',
-            query: {code: {"$nin": ["en-us"]}},
+            query: {code: {"$nin": [base_locale.code]}},
             only: {BASE: ['name', 'code']}
         },
         json: true
