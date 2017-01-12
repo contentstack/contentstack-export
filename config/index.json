@@ -21,7 +21,7 @@
     "contentTypes": {
       "dirName": "contenttypes",
       "fileName": "contenttypes.json",
-      "validKeys": ["title", "uid", "schema", "options","singleton"]
+      "validKeys": ["title", "uid", "schema", "options","singleton","description"]
     },
     "entries": {
       "dirName": "entries",
