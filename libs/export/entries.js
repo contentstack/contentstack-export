@@ -29,7 +29,8 @@ var entriesConfig           = config.modules.entries,
     masterEntriesFolderPath = path.resolve(config.data, 'master', 'entries'),
     masterFolderPath        = path.resolve(config.data, 'master'),
     invalidKeys             = entriesConfig.invalidKeys,
-    limit                   = entriesConfig.limit;
+    limit                   = entriesConfig.limit,
+    base_locale             = config.base_locale;
 
 
 /**
@@ -228,7 +229,7 @@ ExportEntries.prototype = {
     start: function(){
         var self = this;
         this.locales = helper.readFile(path.join(localesFolderPath, config.modules.locales.fileName)) || {};
-        this.locales['locale_key'] = {"name": "English US", "code":"en-us"};
+        this.locales['locale_key'] = base_locale;
 
         return when.promise(function(){
             self.iterateContentTypes()
