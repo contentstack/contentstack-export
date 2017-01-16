@@ -28,6 +28,7 @@ mkdirp.sync(masterFolderPath);
  */
 function ExportContentTypes(){
     this.priority       = [];
+    this.cycle          = [];
     this.master         = {};
     this.contentTypes   = {};
 
@@ -120,12 +121,26 @@ ExportContentTypes.prototype = {
     },
     setPriority: function(content_type_uid){
         var self = this;
+        self.cycle.push(content_type_uid);
+                console.log(content_type_uid);
+
         if (self.master[content_type_uid] && self.master[content_type_uid]['references'].length) {
             for (var i = 0, total = self.master[content_type_uid]['references'].length; i < total; i++) {
-                if (self.master[content_type_uid]['references'][i] == content_type_uid){
+                if (self.master[content_type_uid]['references'][i] == content_type_uid || self.cycle.indexOf(content_type_uid)){
+                    self.cycle = [];
                     continue;
                 }
+
                 self.setPriority(self.master[content_type_uid]['references'][i]);
+                /*console.log(self.cycle);
+                if(self.cycle.indexOf(content_type_uid) == -1) {
+                    self.setPriority(self.master[content_type_uid]['references'][i]);
+                } else {
+                    console.log("cycle detected.")
+                    _.merge(self.priority, self.cycle);
+                    self.cycle = [];
+                    continue;
+                }*/
             }
         }
         if (self.priority.indexOf(content_type_uid) == -1){
