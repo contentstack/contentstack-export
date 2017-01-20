@@ -17,6 +17,7 @@ npm install
 Update configuration details at config/index.json :
 
 ```
+"base_locale": {"name": <<YOUR MASTER LOCALE NAME>>, "code":<<YOUR MASTER LOCALE CODE>>}
 "email": <<YOUR EMAIL ADDRESS>>
 "password" : <<PASSWORD>>
 "source_stack" : <<STACK_API_KEY>>
