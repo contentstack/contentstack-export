@@ -21,7 +21,7 @@
     "contentTypes": {
       "dirName": "contenttypes",
       "fileName": "contenttypes.json",
-      "validKeys": ["title", "uid", "schema", "options","singleton"]
+      "validKeys": ["title", "uid", "schema", "options","singleton","description"]
     },
     "entries": {
       "dirName": "entries",
@@ -38,6 +38,7 @@
     "contentTypes": "/content_types",
     "entries": "/entries"
   },
+  "base_locale":{"name": "English US", "code":"en-us"},
   "email": "<<YOUR EMAIL ADDRESS>>",
   "password" : "<<PASSWORD>>",
   "source_stack" : "<<SOURCE STACK_API_KEY>>",
