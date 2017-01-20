@@ -51,8 +51,6 @@ Note: Before exporting entries, you must export locales, assets and content type
 
 ### Known issues
 * Self/cyclic reference not supported
-* For now only en-us as master language is supported
-* Content type descriptions missing
 
 ## License
 This project is licensed under MIT license
