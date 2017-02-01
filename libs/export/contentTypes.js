@@ -30,7 +30,6 @@ mkdirp.sync(masterFolderPath);
 function ExportContentTypes(){
     this.priority                   = [];
     this.cycle                      = [];
-    this.cycleReferenceContentTypes = [];
     this.master                     = {};
     this.contentTypes               = {};
 
@@ -58,7 +57,6 @@ ExportContentTypes.prototype = {
                     self.setPriority(key);
                 }
                 helper.writeFile(path.join(contentTypesFolderPath, '__priority.json'), self.priority);
-                helper.writeFile(path.join(contentTypesFolderPath, '__cycleReferenceContentTypes.json'), self.cycleReferenceContentTypes);
                 helper.writeFile(path.join(contentTypesFolderPath, '__master.json'), self.master);
                 successLogger('Updated priority and reference/file field of Content Types.');
                 resolve();
