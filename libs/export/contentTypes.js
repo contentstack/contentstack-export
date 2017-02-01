@@ -62,8 +62,10 @@ ExportContentTypes.prototype = {
                 resolve();
             })
             .catch(function(error){
+                helper.writeFile(path.join(contentTypesFolderPath, '__priority.json'), self.priority);
+                helper.writeFile(path.join(contentTypesFolderPath, '__master.json'), self.master);
                 errorLogger(error);
-                reject();
+                return reject();
             })
         })
     },
@@ -127,9 +129,9 @@ ExportContentTypes.prototype = {
     setPriority: function(content_type_uid){
         var self = this;
         self.cycle.push(content_type_uid);
-        if (self.master[content_type_uid] && self.master[content_type_uid]['references'].length) {
+        if (self.master[content_type_uid] && self.master[content_type_uid]['references'].length && self.priority.indexOf(content_type_uid) == -1) {
             for (var i = 0, total = self.master[content_type_uid]['references'].length; i < total; i++) {
-                if (self.master[content_type_uid]['references'][i] == content_type_uid || self.cycle.indexOf(content_type_uid) > -1){
+                if (self.master[content_type_uid]['references'][i]['content_type_uid'] === content_type_uid || self.cycle.indexOf(content_type_uid) > -1){
                     self.cycle = [];
                     continue;
                 }
