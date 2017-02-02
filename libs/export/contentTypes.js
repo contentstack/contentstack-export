@@ -62,8 +62,6 @@ ExportContentTypes.prototype = {
                 resolve();
             })
             .catch(function(error){
-                helper.writeFile(path.join(contentTypesFolderPath, '__priority.json'), self.priority);
-                helper.writeFile(path.join(contentTypesFolderPath, '__master.json'), self.master);
                 errorLogger(error);
                 return reject();
             })

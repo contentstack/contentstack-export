@@ -172,7 +172,7 @@ ExportEntries.prototype = {
                             locale_id: locale_id
                         }
                         for( var e in results){
-                            entriesArray = entriesArray.concat(e);
+                            entriesArray = entriesArray.concat(results[e].entries);
                         }
                         self.putEntries(data, entriesArray);
                         return resolve()
