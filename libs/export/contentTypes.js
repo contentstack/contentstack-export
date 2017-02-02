@@ -55,6 +55,7 @@ ExportContentTypes.prototype = {
                 }
                 for (var key in self.master) {
                     self.setPriority(key);
+                    self.cycle = [];
                 }
                 helper.writeFile(path.join(contentTypesFolderPath, '__priority.json'), self.priority);
                 helper.writeFile(path.join(contentTypesFolderPath, '__master.json'), self.master);
@@ -130,7 +131,7 @@ ExportContentTypes.prototype = {
         if (self.master[content_type_uid] && self.master[content_type_uid]['references'].length && self.priority.indexOf(content_type_uid) == -1) {
             for (var i = 0, total = self.master[content_type_uid]['references'].length; i < total; i++) {
                 if (self.master[content_type_uid]['references'][i]['content_type_uid'] === content_type_uid || self.cycle.indexOf(content_type_uid) > -1){
-                    self.cycle = [];
+                    //self.cycle = [];
                     continue;
                 }
                 self.setPriority(self.master[content_type_uid]['references'][i]['content_type_uid']);
