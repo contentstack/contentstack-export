@@ -48,10 +48,5 @@ After the configuration, you are ready to export content.
  
 Note: Before exporting entries, you must export locales, assets and content types.
 
-### Known issues
-* Self/cyclic reference not supported
-* For now only en-us as master language is supported
-* Content type descriptions missing
-
 ## License
 This project is licensed under MIT license
