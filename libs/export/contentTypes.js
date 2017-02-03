@@ -4,6 +4,7 @@
 var request   = require('request'),
     mkdirp    = require('mkdirp'),
     path      = require('path'),
+    _         = require('lodash'),
     when      = require('when');
 
 /**
@@ -27,9 +28,10 @@ mkdirp.sync(masterFolderPath);
  * @constructor
  */
 function ExportContentTypes(){
-    this.priority       = [];
-    this.master         = {};
-    this.contentTypes   = {};
+    this.priority                   = [];
+    this.cycle                      = [];
+    this.master                     = {};
+    this.contentTypes               = {};
 
     this.requestOptions = {
         url: client.endPoint + config.apis.contentTypes,
@@ -49,7 +51,11 @@ ExportContentTypes.prototype = {
             self.getContentTypes()
             .then(function(results){
                 for (var key in self.master) {
+                    self.detectCycle(key);
+                }
+                for (var key in self.master) {
                     self.setPriority(key);
+                    self.cycle = [];
                 }
                 helper.writeFile(path.join(contentTypesFolderPath, '__priority.json'), self.priority);
                 helper.writeFile(path.join(contentTypesFolderPath, '__master.json'), self.master);
@@ -58,7 +64,7 @@ ExportContentTypes.prototype = {
             })
             .catch(function(error){
                 errorLogger(error);
-                reject();
+                return reject();
             })
         })
     },
@@ -96,6 +102,7 @@ ExportContentTypes.prototype = {
                 if (validKeys[j] == 'uid') {
                     temp['uid'] = contentType['uid'];
                 } else if (validKeys[j] == 'schema') {
+                    temp['references'] = getFileFields(contentType['schema']);
                     self.getReferenceAndFileFields(contentType['schema'], temp);
                 }
             }
@@ -107,8 +114,8 @@ ExportContentTypes.prototype = {
         if (schema) {
             for (var i = 0, total = schema.length; i < total; i++) {
                 switch (schema[i]['data_type']) {
-                    case 'reference':
-                        (temp['references'].indexOf(schema[i]['reference_to']) == -1) ? temp['references'].push(schema[i]['reference_to']) : '';
+                   /* case 'reference':
+                        (temp['references'].indexOf(schema[i]['reference_to']) == -1) ? temp['references'].push(schema[i]['reference_to']) : '';*/
                     case 'file':
                         (temp['fields'][schema[i]['data_type']].indexOf(schema[i]['uid']) == -1) ? temp['fields'][schema[i]['data_type']].push(schema[i]['uid']) : '';
                         break;
@@ -120,18 +127,94 @@ ExportContentTypes.prototype = {
     },
     setPriority: function(content_type_uid){
         var self = this;
-        if (self.master[content_type_uid] && self.master[content_type_uid]['references'].length) {
+        self.cycle.push(content_type_uid);
+        if (self.master[content_type_uid] && self.master[content_type_uid]['references'].length && self.priority.indexOf(content_type_uid) == -1) {
             for (var i = 0, total = self.master[content_type_uid]['references'].length; i < total; i++) {
-                if (self.master[content_type_uid]['references'][i] == content_type_uid){
+                if (self.master[content_type_uid]['references'][i]['content_type_uid'] === content_type_uid || self.cycle.indexOf(content_type_uid) > -1){
+                    //self.cycle = [];
                     continue;
                 }
-                self.setPriority(self.master[content_type_uid]['references'][i]);
+                self.setPriority(self.master[content_type_uid]['references'][i]['content_type_uid']);
             }
         }
         if (self.priority.indexOf(content_type_uid) == -1){
             self.priority.push(content_type_uid);
         }
+    },
+    detectCycle: function(content_type_uid) {
+        try{
+            var self = this;
+            var refMapping = self.master;
+            var seenObjects = [];
+            var cyclicContentTypes = [];
+            function detect (key) {
+                seenObjects.push(key);
+                refMapping[key]['references'].map(function(ref, index){
+                    if(seenObjects.indexOf(ref.content_type_uid) == -1) {
+                        detect(ref.content_type_uid);
+                    } else {
+                        self.master[key]['references'][index]['isCycle'] = true;
+                        cyclicContentTypes.push(ref.content_type_uid);
+                        return seenObjects;
+                    }               
+                })
+            }
+            detect(content_type_uid);
+            return cyclicContentTypes;
+        } catch(e){
+            errorLogger(e)
+        }
+       
     }
+
 };
+
+String.prototype.isBlank = function() {
+    return _.isNumber(this) ? false : _.isEmpty(this)
+};
+
+
+function getFileFields(schema){
+   var references = [];
+
+   var x = traverseSchemaWithPath(schema, function(path, entryPath, field) {
+       if (field.data_type === 'reference') {
+           references.push({uid: field.uid, path: path, entryPath: entryPath, content_type_uid: field.reference_to})
+       }
+   }, false);
+
+   return references;
+}
+
+/*
+  Find out file's
+*/
+function traverseSchemaWithPath(schema, fn, path, entryPath) {
+   path = path || ''
+   entryPath = entryPath || ''
+
+   function getPath(uid) {
+       return _.isEmpty(path) ? uid : [path, uid].join('.')
+   }
+
+   function getEntryPath(uid) {
+       return _.isEmpty(entryPath) ? uid : [entryPath, uid].join('.')
+   }
+
+   var promises = schema.map(function(field, index) {
+       var pth = getPath("schema["+index+"]")
+        var entryPth = ""
+       field.data_type === 'group' && field.multiple ? entryPth = getEntryPath(field.uid)+"[]" : entryPth = getEntryPath(field.uid)
+       if (field.data_type === 'group') {
+           return traverseSchemaWithPath(field.schema, fn, pth, entryPth)
+       }
+
+       return fn(pth, entryPth, field)
+   })
+
+   return _.flatten(_.compact(promises))
+}
+
+
 
 module.exports = ExportContentTypes;
