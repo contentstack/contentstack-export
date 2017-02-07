@@ -48,5 +48,8 @@ After the configuration, you are ready to export content.
  
 Note: Before exporting entries, you must export locales, assets and content types.
 
+### Known issues
+* It will migrate only latest published version of entry.
+
 ## License
 This project is licensed under MIT license
