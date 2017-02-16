@@ -1,12 +1,35 @@
 {
   "name": "contentstack-export",
   "version": "0.0.1",
+  "description": "Export data from built.io contentstack",
+  "homepage": "https://www.built.io/products/contentstack/overview",
+  "author": {
+    "name": "Built.io Contentstack",
+    "url": "https://www.built.io/"
+  },
+  "license": "MIT",
   "dependencies": {
     "lodash": "^4.17.2",
     "mkdirp": "^0.5.1",
-    "request": "~2.45.0",
+    "request": "^2.45.0",
     "when": "^3.7.7",
     "winston": "^2.2.0"
+  },
+  "license": "MIT",
+  "main": "app.js",
+  "maintainers": [
+    {
+      "name": "ninadhatkar",
+      "email": "ninad.hatkar@raweng.com"
+    },
+    {
+      "name": "mynk",
+      "email": "mayank@raweng.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/builtio-contentstack/contentstack-export"
   },
   "scripts": {
     "export" : "node app.js",
