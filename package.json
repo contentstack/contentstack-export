@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Export data from built.io contentstack",
   "homepage": "https://www.built.io/products/contentstack/overview",
-   "author": {
+  "author": {
     "name": "Built.io Contentstack",
     "url": "https://www.built.io/"
   },
