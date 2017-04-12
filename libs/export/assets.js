@@ -1,24 +1,24 @@
 /**
  * External module Dependencies.
  */
-var request   = require('request'),
-    mkdirp    = require('mkdirp'),
-    path      = require('path'),
-    when      = require('when'),
-    guard     = require('when/guard'),
-    parallel  = require('when/parallel'),
-    fs        = require('fs');
+var request = require('request'),
+    mkdirp = require('mkdirp'),
+    path = require('path'),
+    when = require('when'),
+    guard = require('when/guard'),
+    parallel = require('when/parallel'),
+    fs = require('fs');
 
 /**
  * Internal module Dependencies.
  */
 var helper = require('../../libs/utils/helper.js');
 
-var assetConfig         = config.modules.assets,
-    validKeys           = assetConfig.validKeys,
-    limit               = assetConfig.limit,
-    assetsFolderPath    = path.resolve(config.data, assetConfig.dirName),
-    masterFolderPath    = path.resolve(config.data, 'master');
+var assetConfig = config.modules.assets,
+    validKeys = assetConfig.validKeys,
+    limit = assetConfig.limit,
+    assetsFolderPath = path.resolve(config.data, assetConfig.dirName),
+    masterFolderPath = path.resolve(config.data, 'master');
 
 /**
  * Create folders
@@ -27,14 +27,14 @@ mkdirp.sync(assetsFolderPath);
 mkdirp.sync(masterFolderPath);
 
 function ExportAssets() {
-    this.master     = {};
-    this.urlMaster  = {};
-    this.assets     = {};
-    this.count      = 0;
+    this.master = {};
+    this.urlMaster = {};
+    this.assets = {};
+    this.count = 0;
     this.requestOptions = {
         url: client.endPoint + config.apis.assets,
         qs: {
-            skip:0,
+            skip: 0,
             limit: limit,
             asc: "updated_at",
             relative_urls: true,
@@ -49,46 +49,73 @@ function ExportAssets() {
 }
 
 ExportAssets.prototype = {
-    setStatus: function(asset_uid, status) {
+    setStatus: function (asset_uid, status) {
         var self = this;
         var tempAssets = helper.readFile(path.join(assetsFolderPath, assetConfig.fileName));
-        if(tempAssets && tempAssets[asset_uid])
+        if (tempAssets && tempAssets[asset_uid])
             tempAssets[asset_uid]['status'] = status;
         helper.writeFile(path.join(assetsFolderPath, assetConfig.fileName), tempAssets);
     },
-    getAssets: function(skip) {
+    getAssets: function (skip) {
         var self = this;
         self.requestOptions.qs.skip = skip;
         return when.promise(function (resolve, reject) {
-            self.requestOptions.qs.skip = skip;
-            request(self.requestOptions, function (err, res, body) {
-                if (!err && res.statusCode == 200 && body.assets && body.assets.length) {
-                    resolve(body);
-                } if(body.assets && body.assets.length == 0){
-                    successLogger("No assets found.");
-                    resolve();
-                }  else {
-                    if (!err) {
-                        reject(body);
-                    } else {
-                        reject(err);
+            const MAX_RETRY = 2;
+            var retryCnt = 0;
+            retryAssets();
+            function retryAssets() {
+                self.requestOptions.qs.skip = skip;
+                request(self.requestOptions, function (err, res, body) {
+                    if (body.assets && body.assets.length == 0) {
+                        successLogger("No assets found.");
+                        resolve();
                     }
-                }
-            });
+                    if (!err && res.statusCode == 200 && body.assets && body.assets.length) {
+                        resolve(body);
+                    }
+                    else {
+                        if (retryCnt < MAX_RETRY) {
+                            retryCnt += 1;
+                            var currRetryIntervalMs = (1 << retryCnt) * 1000; //exponential back off logic
+                            setTimeout(retryAssets, currRetryIntervalMs);
+                        }
+                        else {
+                            if(err){
+                                var errorcode = "'"+err.code+"'";
+                                var RETRIABLE_NETWORK_ERRORS = ['ECONNRESET', 'ENOTFOUND', 'ESOCKETTIMEDOUT', 'ETIMEDOUT', 'ECONNREFUSED', 'EHOSTUNREACH', 'EPIPE', 'EAI_AGAIN'];
+                                for(var i = 0;i<RETRIABLE_NETWORK_ERRORS.length;i++){
+                                    if(RETRIABLE_NETWORK_ERRORS[i] == errorcode){
+                                        var currRetryIntervalMs = (1 << retryCnt) * 1000; //exponential back off logic
+                                        setTimeout(retryAssets, currRetryIntervalMs);
+                                    }
+                                    else{
+                                        errorLogger('http request fail due to ',errorcode);
+                                        reject(err)
+                                    }
+                                }
+                            }
+                            else {
+                                errorLogger('request failed due to ',body)
+                                reject(body)
+                            }
+                        }
+                    }
+                });
+            }
         });
     },
-    putAssets: function(assets) {
+    putAssets: function (assets) {
         var self = this;
-        return when.promise(function(resolve, reject){
+        return when.promise(function (resolve, reject) {
 
-            for(var i = 0, total = assets.length; i < total; i++){
+            for (var i = 0, total = assets.length; i < total; i++) {
                 assets[i]['status'] = false;
                 assets[i]['url'] = assetConfig.host + assets[i]['url'];
                 var temp = {};
-                for(var j = 0; j < validKeys.length; j++) {
+                for (var j = 0; j < validKeys.length; j++) {
                     temp[validKeys[j]] = assets[i][validKeys[j]];
                 }
-                if(!self.assets[temp['uid']]) self.assets[temp['uid']] = temp;
+                if (!self.assets[temp['uid']]) self.assets[temp['uid']] = temp;
                 self.master[temp['uid']] = "";
                 self.urlMaster[temp['url']] = "";
             }
@@ -99,9 +126,11 @@ ExportAssets.prototype = {
 
             var _getAsset = [];
 
-            for(var i = 0, total = assets.length; i < total; i++) {
-                _getAsset.push(function(data){
-                    return function(){ return self.getAsset(data);};
+            for (var i = 0, total = assets.length; i < total; i++) {
+                _getAsset.push(function (data) {
+                    return function () {
+                        return self.getAsset(data);
+                    };
                 }(assets[i]));
             }
 
@@ -111,84 +140,86 @@ ExportAssets.prototype = {
             var taskResults = parallel(_getAsset);
 
             taskResults
-            .then(function(results) {
-                resolve(results);
-            })
-            .catch(function(e){
-                errorLogger('Failed to download assets: ', e);
-                reject(e);
-            });
+                .then(function (results) {
+                    resolve(results);
+                })
+                .catch(function (e) {
+                    errorLogger('Failed to download assets: ', e);
+                    reject(e);
+                });
         })
     },
-    getAllAssets: function(){
+    getAllAssets: function () {
         var self = this;
-        return when.promise(function(resolve, reject){
+        return when.promise(function (resolve, reject) {
             self.getAssets(0)
-            .then(function(data){
-                var assets = data.assets;
-                var totalRequests = Math.ceil(data.count/limit);
-                if(totalRequests > 1){
-                    var _getAssets = [];
-                    for(var i = 1; i < totalRequests; i++) {
-                        _getAssets.push(function(i){
-                            return function(){ return self.getAssets(i*limit)};
-                        }(i));
-                    }
-
-                    var guardTask = guard.bind(null, guard.n(2));
-                    _getAssets = _getAssets.map(guardTask);
-
-                    var taskResults = parallel(_getAssets);
-
-                    taskResults
-                    .then(function(results) {
-                        for(var i = 0, total = results.length; i < total; i++){
-                            assets = assets.concat(results[i]['assets']);
+                .then(function (data) {
+                    var assets = data.assets;
+                    var totalRequests = Math.ceil(data.count / limit);
+                    if (totalRequests > 1) {
+                        var _getAssets = [];
+                        for (var i = 1; i < totalRequests; i++) {
+                            _getAssets.push(function (i) {
+                                return function () {
+                                    return self.getAssets(i * limit)
+                                };
+                            }(i));
                         }
-                        successLogger(assets.length, "asset/s found.");
+
+                        var guardTask = guard.bind(null, guard.n(2));
+                        _getAssets = _getAssets.map(guardTask);
+
+                        var taskResults = parallel(_getAssets);
+
+                        taskResults
+                            .then(function (results) {
+                                for (var i = 0, total = results.length; i < total; i++) {
+                                    assets = assets.concat(results[i]['assets']);
+                                }
+                                successLogger(assets.length, "asset/s found.");
+                                self.putAssets(assets)
+                                    .then(function (results) {
+                                        successLogger(results.length, " asset/s downloaded.");
+                                        resolve();
+                                    })
+                                    .catch(function (err) {
+                                        errorLogger(err)
+                                        reject();
+                                    });
+                            });
+                    } else {
                         self.putAssets(assets)
-                        .then(function(results){
-                            successLogger( results.length, " asset/s downloaded.");
-                            resolve();
-                        })
-                        .catch(function(err){
-                            errorLogger(err)
-                            reject();
-                        });
-                    });
-                } else {
-                    self.putAssets(assets)
-                    .then(function(results){
-                        successLogger( results.length, " asset/s downloaded.");
-                        resolve()
-                    })
-                    .catch(function(err){
-                        errorLogger(err)
-                        reject()
-                    });
-                }
-            })
-            .catch(function(e){
+                            .then(function (results) {
+                                successLogger(results.length, " asset/s downloaded.");
+                                resolve()
+                            })
+                            .catch(function (err) {
+                                errorLogger(err)
+                                reject()
+                            });
+                    }
+                })
+                .catch(function (e) {
                     errorLogger(e);
                     resolve(e);
-            });
+                });
         })
 
     },
-    getAsset :function(data) {
+    getAsset: function (data) {
         var self = this;
         return when.promise(function (resolve, reject) {
             var out = request({url: data.url, headers: self.headers});
             out.on('response', function (res) {
-                if (res.statusCode == 200 ) {
+                if (res.statusCode == 200) {
                     //successLogger('Downloading ', data.uid, 'with name "', data.filename, '" ...');
                     var assetFolderPath = path.resolve(assetsFolderPath, data.uid);
                     helper.makeDirectory(assetFolderPath);
                     var localStream = fs.createWriteStream(path.join(assetFolderPath, data.filename));
                     out.pipe(localStream);
-                    localStream.on('close', function (){
+                    localStream.on('close', function () {
                         self.setStatus(data.uid, true);
-                        successLogger(self.count,': Downloaded', data.uid, 'with name "', data.filename, '" .');
+                        successLogger(self.count, ': Downloaded', data.uid, 'with name "', data.filename, '" .');
                         self.count++;
                         resolve(data.uid);
                     });
@@ -210,17 +241,17 @@ ExportAssets.prototype = {
             out.end();
         });
     },
-    start :function() {
+    start: function () {
         successLogger("Exporting assets...");
         var self = this;
-        return when.promise(function(resolve, reject){
+        return when.promise(function (resolve, reject) {
             self.getAllAssets()
-            .then(function(){
-                resolve()
-            })
-            .catch(function(){
-                reject()
-            })
+                .then(function () {
+                    resolve()
+                })
+                .catch(function () {
+                    reject()
+                })
         })
     }
 };
