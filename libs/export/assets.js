@@ -59,9 +59,10 @@ ExportAssets.prototype = {
     getAssets: function(skip) {
         var self = this;
         self.requestOptions.qs.skip = skip;
-        return when.promise(function (resolve, reject) {
-            self.requestOptions.qs.skip = skip;
+        return when.promise(function (resolve, reject) {  
+            self.requestOptions.qs.skip = skip; 
             request(self.requestOptions, function (err, res, body) {
+
                 if (!err && res.statusCode == 200 && body.assets && body.assets.length) {
                     resolve(body);
                 } if(body.assets && body.assets.length == 0){
@@ -77,8 +78,10 @@ ExportAssets.prototype = {
             });
         });
     },
+
     putAssets: function(assets) {
         var self = this;
+
         return when.promise(function(resolve, reject){
 
             for(var i = 0, total = assets.length; i < total; i++){
@@ -121,17 +124,20 @@ ExportAssets.prototype = {
         })
     },
     getAllAssets: function(){
+
         var self = this;
         return when.promise(function(resolve, reject){
             self.getAssets(0)
             .then(function(data){
                 var assets = data.assets;
                 var totalRequests = Math.ceil(data.count/limit);
+
+
                 if(totalRequests > 1){
                     var _getAssets = [];
                     for(var i = 1; i < totalRequests; i++) {
                         _getAssets.push(function(i){
-                            return function(){ return self.getAssets(i*limit)};
+                            return function (){ return self.getAssets(i*limit)};
                         }(i));
                     }
 
@@ -176,7 +182,10 @@ ExportAssets.prototype = {
 
     },
     getAsset :function(data) {
+        
         var self = this;
+        return function timeout(msec) {
+            
         return when.promise(function (resolve, reject) {
             var out = request({url: data.url, headers: self.headers});
             out.on('response', function (res) {
@@ -208,7 +217,8 @@ ExportAssets.prototype = {
                 reject(_error);
             });
             out.end();
-        });
+        }).timeout(1000);
+    }
     },
     start :function() {
         successLogger("Exporting assets...");

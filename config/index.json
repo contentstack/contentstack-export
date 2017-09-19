@@ -30,7 +30,7 @@
       "limit": 50
     }
   },
-  "apis" : {
+  "apis" : {  
     "userSession": "/user-session",
     "locales": "/locales",
     "environments": "/environments",
@@ -39,9 +39,9 @@
     "entries": "/entries"
   },
   "base_locale":{"name": "English US", "code":"en-us"},
-  "email": "<<YOUR EMAIL ADDRESS>>",
-  "password" : "<<PASSWORD>>",
-  "source_stack" : "<<SOURCE STACK_API_KEY>>",
-  "data": "<<FOLDER PATH FOR DATA TO BE EXPORTED>>",
-  "tfa_token" : "<<YOUR TWO FACTOR AUTHENTICATION TOKEN>>"
+  "email": "rohit.mishra@raweng.com",
+  "password" : "comeonyaar123",
+  "source_stack" : "blte7fb8144ca21dc02",
+  "data": "/home/rohit/Projects/cs-dev-project/Newcontentstack-export"
+  
 }

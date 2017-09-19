@@ -33,6 +33,7 @@ module.exports =  function createClient(opts,callback){
         },
         method:"post"
     };
+    
     request(options, function(err, res, body){
         if(!err && res.statusCode == 200 ){
             client.authtoken = body.user.authtoken;

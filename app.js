@@ -8,6 +8,8 @@ global.successLogger = require("./libs/utils/logger.js")("success").log;
 global.warnLogger = require("./libs/utils/logger.js")("warn").log;
 
 createClient(config, function(client) {
+
+
     global.client = client;
 
     var modulesList = ['assets','locales','environments','contentTypes','entries'];
@@ -15,6 +17,7 @@ createClient(config, function(client) {
 
     if(process.argv.length == 3) {
         var val = process.argv[2];
+
         if(val && modulesList.indexOf(val) > -1) {
             var ModuleExport = require('./libs/export/'+val+'.js');
             var moduleExport = new ModuleExport();
@@ -26,6 +29,7 @@ createClient(config, function(client) {
             return 0;
         }
     } else if(process.argv.length==2){
+           
         for(var i = 0, total = modulesList.length; i < total; i++) {
             var ModuleExport = require('./libs/export/' + modulesList[i] + '.js');
             var moduleExport = new ModuleExport();
