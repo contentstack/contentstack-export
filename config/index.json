@@ -39,9 +39,9 @@
     "entries": "/entries"
   },
   "base_locale":{"name": "English US", "code":"en-us"},
-  "email": "rohit.mishra@raweng.com",
-  "password" : "comeonyaar123",
-  "source_stack" : "blte7fb8144ca21dc02",
-  "data": "/home/rohit/Projects/cs-dev-project/Newcontentstack-export"
+  "email": "<<Email-id>>",
+  "password" : "<<password>>",
+  "source_stack" : "<<stack_Apikey>>",
+  "data": "<<PATH WHERE to STORE DATA>>"
   
 }
