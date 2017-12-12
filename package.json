@@ -15,7 +15,6 @@
     "when": "^3.7.7",
     "winston": "^2.2.0"
   },
-  "license": "MIT",
   "main": "app.js",
   "maintainers": [
     {
@@ -32,12 +31,11 @@
     "url": "https://github.com/builtio-contentstack/contentstack-export"
   },
   "scripts": {
-    "export" : "node app.js",
+    "export": "node app.js",
     "export-assets": "node app.js dump=assets",
     "export-entries": "node app.js dump=entries",
     "export-contenttypes": "node app.js dump=contenttypes",
     "export-locales": "node app.js dump=locales",
     "export-env": "node app.js dump=environments"
   }
-
 }
