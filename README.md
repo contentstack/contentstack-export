@@ -1,6 +1,6 @@
-# Built.io Contentstack export tool
+# Contentstack export utility
 
-Built.io Contentstack is a headless CMS with an API-first approach that puts content at the centre. It is designed to simplify the process of publication by separating code from content.
+Contentstack is a headless CMS with an API-first approach that puts content at the centre. It is designed to simplify the process of publication by separating code from content.
 
 This utility helps you to export content from Contentstack. The content is exported in JSON format and stored in file system.
 
@@ -14,43 +14,43 @@ npm install
 
 ## Configuration
 
-Update configuration details at config/index.json :
+Update configuration details at config/index.js
 
-```
-"base_locale": {"name": <<YOUR MASTER LOCALE NAME>>, "code":<<YOUR MASTER LOCALE CODE>>}
-"email": <<YOUR EMAIL ADDRESS>>
-"password" : <<PASSWORD>>
-"source_stack" : <<STACK_API_KEY>>
-"data": <<FOLDER PATH WHERE DATA SHOULD BE EXPORTED>>
+```js
+'master_locale': 
+	{
+		'name': <<your stack's master locale>>,  // ex: 'English - United States'
+		'code': <<stack's master locale's code>> // ex: "en-us"
+	}
+'email': << your registered e-mail address >>
+'password': << your account passwd >>
+// OR 
+'access_token': << your stack's access_token >> 
+'source_stack': << stack's api key >>
+'data': << location of the folder, where you'd want the exported content >> // ex: './_content'
   ```
     
 ## Usage
-  
-After the configuration, you are ready to export content.
+After setting the configuration, you'll can run the below given commands!
 
-### Export all the modules :
-
-  ```
-  npm run export 
-  ```
-  
-### Export specific module :
-  
+### Export all the modules
+```bash
+npm run export 
 ```
-  npm run export <<module name>>
- ```
- 
- Module names and sequence can be as follows:
- 1. assets
- 2. environments
- 3. locales
- 4. contentTypes
- 5. entries
- 
-Note: Before exporting entries, you must export locales, assets and content types.
+  
+### Export specific module
+```bash
+npm run export assets
+npm run export env
+npm run export locales
+npm run export contenttypes
+npm run export entries
+```
+> Note: Before exporting entries, you must export locales, assets and content types.
 
 ### Known issues
 * It will migrate only latest published version of entry.
+* v0.0.2 does not support exporting Contentstack's Releases and Extensions
 
 ## License
 This project is licensed under MIT license

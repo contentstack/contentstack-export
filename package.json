@@ -1,21 +1,21 @@
 {
   "name": "contentstack-export",
-  "version": "0.0.1",
-  "description": "Export data from built.io contentstack",
-  "homepage": "https://www.built.io/products/contentstack/overview",
+  "version": "0.0.2",
+  "description": "Export utility of Contentstack",
+  "homepage": "https://www.contentstack.com/",
   "author": {
-    "name": "Built.io Contentstack",
-    "url": "https://www.built.io/"
+    "name": "Contentstack",
+    "url": "https://www.contentstack.com/"
   },
   "license": "MIT",
   "dependencies": {
+    "bluebird": "^3.5.1",
     "lodash": "^4.17.2",
     "mkdirp": "^0.5.1",
     "request": "^2.45.0",
     "when": "^3.7.7",
     "winston": "^2.2.0"
   },
-  "license": "MIT",
   "main": "app.js",
   "maintainers": [
     {
@@ -32,12 +32,14 @@
     "url": "https://github.com/builtio-contentstack/contentstack-export"
   },
   "scripts": {
-    "export" : "node app.js",
-    "export-assets": "node app.js dump=assets",
-    "export-entries": "node app.js dump=entries",
-    "export-contenttypes": "node app.js dump=contenttypes",
-    "export-locales": "node app.js dump=locales",
-    "export-env": "node app.js dump=environments"
+    "export": "node app.js",
+    "export-assets": "node app.js assets",
+    "export-entries": "node app.js entries",
+    "export-contenttypes": "node app.js content_types",
+    "export-locales": "node app.js locales",
+    "export-env": "node app.js environments"
+  },
+  "devDependencies": {
+    "eslint": "^4.19.1"
   }
-
 }

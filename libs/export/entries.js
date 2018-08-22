@@ -1,243 +1,240 @@
-/**
- * Created by Ninad Hatkar on 10-11-2016.
- */
+var fs = require('fs');
+var path = require('path');
+var _ = require('lodash');
+var Promise = require('bluebird');
+var chalk = require('chalk');
+var mkdirp = require('mkdirp');
 
-/**
- * External module Dependencies.
- */
-var request     = require('request'),
-    path        = require('path'),
-    when        = require('when'),
-    guard       = require('when/guard'),
-    parallel    = require('when/parallel'),
-    sequence    = require('when/sequence'),
-    url         = require('url');
+var request = Promise.promisify(require('request'));
 
-/**
- * Internal module Dependencies.
- */
-var helper = require('../../libs/utils/helper.js');
+var config = require('../../config');
+var helper = require('../utils/helper');
+var log = require('../utils/log');
 
-/**
- *
- * Deceleration
- */
-var entriesConfig           = config.modules.entries,
-    entriesFolderPath       = path.resolve(config.data, entriesConfig.dirName),
-    localesFolderPath       = path.resolve(config.data, config.modules.locales.dirName);
-    contentTypesFolderPath  = path.resolve(config.data, config.modules.contentTypes.dirName),
-    masterEntriesFolderPath = path.resolve(config.data, 'master', 'entries'),
-    masterFolderPath        = path.resolve(config.data, 'master'),
-    invalidKeys             = entriesConfig.invalidKeys,
-    limit                   = entriesConfig.limit,
-    base_locale             = config.base_locale;
+var entriesConfig = config.modules.entries;
+var entryFolderPath = path.resolve(config.data, config.modules.entries.dirName);
 
+var localesFilePath = path.resolve(config.data, config.modules.locales.dirName, config.modules.locales
+  .fileName);
+var schemaFilePath = path.resolve(config.data, config.modules.content_types.dirName, 'schema.json');
+var invalidKeys = entriesConfig.invalidKeys;
+var limit = entriesConfig.limit;
+var content_types;
+var locales;
 
-/**
- * Create required folders
- */
-helper.makeDirectory(entriesFolderPath, masterFolderPath, masterEntriesFolderPath);
-
-/**
- *
- * @constructor
- */
-function ExportEntries(){
-    this.priority   = [];
-    this.master     = {};
-    this.entries    = {};
-
-    this.requestOptions = {
-        headers: {
-            api_key: config.source_stack,
-            authtoken: client.authtoken
-        },
-        qs: {include_count: true, skip: 0, limit: limit},
-        json: true
-    };
-
+function exportEntries() {
+  this.requestOptions = {
+    headers: {
+      api_key: config.source_stack,
+      authtoken: client.authtoken
+    },
+    qs: {
+      include_count: true,
+      limit: limit
+    },
+    json: true
+  };
 }
 
-
-/**
- *
- * @param contentType_uid
- * @param entry
- */
-var filterAssetsInEntry = function(contentType_uid, entry){
-    for(var key in entry){
-        if(typeof entry[key] == "object" && entry[key]) {
-            if(entry[key].hasOwnProperty('uid') && entry[key].hasOwnProperty('filename') && entry[key].hasOwnProperty('content_type') && entry[key].hasOwnProperty('file_size')){
-                entry[key] = entry[key]['uid'];
-            } else {
-                filterAssetsInEntry(contentType_uid, entry[key]);
+exportEntries.prototype.start = function () {
+  var self = this;
+  log.success(chalk.blue('Starting entry migration'));
+  return new Promise(function (resolve, reject) {
+    try {
+      locales = helper.readFile(localesFilePath);
+      var apiBucket = [];
+      content_types = helper.readFile(schemaFilePath);
+      if (content_types.length !== 0) {
+        content_types.forEach(function (content_type) {
+          if (Object.keys(locales).length !== 0) {
+            for (var _locale in locales) {
+              apiBucket.push({
+                content_type: content_type.uid,
+                locale: locales[_locale].code
+              });
             }
+          }
+          apiBucket.push({
+            content_type: content_type.uid,
+            locale: config.master_locale.code
+          });
+        });
+        return Promise.map(apiBucket, function (apiDetails) {
+          return self.getEntries(apiDetails);
+        }, {
+          concurrency: 1
+        }).then(function () {
+          log.success(chalk.blue('Entry migration completed successfully'));
+          return resolve();
+        }).catch(function (error) {
+          log.error(chalk.red('Entry migration failed due to the following reason: ' + error));
+          return reject();
+        });
+      } else {
+        log.success(chalk.blue('No content_types were found in the Stack'));
+        return resolve();
+      }
+    } catch (error) {
+      return reject(error);
+    }
+  });
+};
+
+exportEntries.prototype.getEntry = function (apiDetails) {
+  var self = this;
+  return new Promise(function (resolve, reject) {
+    var requestObject = {
+      url: client.endPoint + config.apis.content_types + apiDetails.content_type + config.apis.entries +
+      apiDetails.uid,
+      method: 'GET',
+      headers: self.requestOptions.headers,
+      qs: {
+        locale: apiDetails.locale,
+        except: {
+          BASE: invalidKeys
+        },
+        version: apiDetails.version
+      },
+      json: true
+    };
+    return request(requestObject).then(function (response) {
+      if (response.statusCode === 200) {
+        var entryPath = path.join(entryFolderPath, apiDetails.locale, apiDetails.content_type,
+          response.body.entry.uid);
+        mkdirp.sync(entryPath);
+        helper.writeFile(path.join(entryPath, 'version-' + response.body.entry._version +
+          '.json'), response.body.entry);
+        log.success('Completed version backup of entry: ' + response.body.entry.uid +
+          ', version: ' + response.body.entry._version + ', content type: ' + apiDetails.content_type
+        );
+        if (--apiDetails.version !== 0) {
+          return self.getEntry(apiDetails).then(function () {
+            return resolve();
+          }).catch(function (error) {
+            return reject(error);
+          });
+        } else {
+          return resolve();
         }
-    }
+      } else if (response.statusCode >= 500) {
+        return self.getEntry(apiDetails).then(resolve).catch(reject);
+      } else if (response.statusCode >= 400 && response.statusCode <= 499) {
+        log.error(chalk.red('Entry not found. API request made: ' + JSON.stringify(
+          requestObject), ' - API Details: ' + JSON.stringify(apiDetails)));
+        log.error(chalk.black.bgWhite(JSON.stringify(response.error) || JSON.stringify(
+          response.body)));
+        return reject(response.error || response.body);
+      }
+    }).catch(function (error) {
+      return reject(error);
+    });
+  });
 };
 
-/**
- *
- * @param entry
- * @returns {*}
- */
-var filterEntry =  function(entry){
-    var keys = Object.keys(entry);
-    for(var i = 0, total = keys.length; i < total; i++){
-        if(keys[i] && invalidKeys.indexOf(keys[i]) > -1)
-            delete entry[keys[i]];
+exportEntries.prototype.getEntries = function (apiDetails) {
+  var self = this;
+  return new Promise(function (resolve, reject) {
+    var requestObject = _.cloneDeep(self.requestOptions);
+    requestObject.uri = client.endPoint + config.apis.content_types + apiDetails.content_type + config.apis.entries;
+    if (typeof apiDetails.skip !== 'number') {
+      apiDetails.skip = 0;
     }
-    return entry;
-};
 
-/**
- *
- * @type {{start: Function, getEntries: Function, getAllEntries: Function}}
- */
-ExportEntries.prototype = {
+    requestObject.qs = {
+      locale: apiDetails.locale,
+      skip: apiDetails.skip,
+      limit: limit,
+      include_count: true
+    };
 
-    getEntries: function(options){
-        var self = this;
-        return when.promise(function(resolve, reject){
-            request(options, function(err, res, body){
-                if(!err && res.statusCode == 200 && body && body.entries){
-                    return resolve(body);
-                } else {
-                    if(err){
-                        errorLogger("Error while migrating entry", err);
-                    }else{
-                        errorLogger("Error while migrating entry", body);
-                    }
-                    reject(body);
-                }
+    return request(requestObject).then(function (response) {
+      if (response.statusCode === 200) {
+        // /entries/content_type_uid/locale.json
+        if (!fs.existsSync(path.join(entryFolderPath, apiDetails.content_type))) {
+          mkdirp.sync(path.join(entryFolderPath, apiDetails.content_type));
+        }
+        var entriesFilePath = path.join(entryFolderPath, apiDetails.content_type, apiDetails.locale + '.json');
+        var entries = helper.readFile(entriesFilePath);
+        entries = entries || {};
+        response.body.entries.forEach(function (entry) {
+          entries[entry.uid] = entry;
+        });
+        helper.writeFile(entriesFilePath, entries);
+
+        if (typeof config.versioning === 'boolean' && config.versioning) {
+          for (var locale in locales) {
+            // make folders for each language
+            content_types.forEach(function (content_type) {
+              // make folder for each content type
+              var versionedEntryFolderPath = path.join(entryFolderPath, locales[locale].code,
+                content_type.uid);
+              mkdirp.sync(versionedEntryFolderPath);
             });
-        });
-    },
-    putEntries: function(data, entriesArray){
-        var self = this,
-        contentTypePath = path.join(entriesFolderPath, data.contentType_uid);
+          }
+          return Promise.map(response.body.entries, function (entry) {
+            var entryDetails = {
+              content_type: apiDetails.content_type,
+              uid: entry.uid,
+              version: entry._version,
+              locale: apiDetails.locale
+            };
+            return self.getEntry(entryDetails).then(function () {
+              return;
+            }).catch(function (error) {
+              throw error;
+            });
+          }, {
+            concurrency: 1
+          }).then(function () {
 
-        helper.makeDirectory(contentTypePath);
-        var tempEntries = {};
-        for(var i = 0, total = entriesArray.length; i < total; i++){
-            if(entriesArray[i] && entriesArray[i]['uid']){
-                tempEntries[entriesArray[i]['uid']] = filterEntry(entriesArray[i]);
-                filterAssetsInEntry(data.contentType_uid, entriesArray[i]);
-            }
-        }
-        self.entries[data.contentType_uid] = self.entries[data.contentType_uid] || {};
-        self.entries[data.contentType_uid][data.locale_id]  = self.entries[data.contentType_uid][data.locale_id] || {};
-
-        var keys = Object.keys(tempEntries);
-
-        for(var i = 0, total = keys.length; i < total; i++){
-            self.entries[data.contentType_uid][data.locale_id][keys[i]] = "";
-        }
-        helper.writeFile(path.join(masterEntriesFolderPath, data.contentType_uid + '.json'), self.entries[data.contentType_uid]);
-        helper.writeFile(path.join(contentTypePath, data.locale_id + '.json'), tempEntries);
-        successLogger(Object.keys(tempEntries).length, 'Entry/ies has been exported for "', data.contentType_uid, '" => ', data.locale_id, '" contentType.');
-    },
-    getAllEntriesOfContentType: function(content_type_uid, locale_id){
-        var self    = this,
-            options = self.requestOptions,
-            entriesArray = [];
-
-        options.url = client.endPoint + config.apis.contentTypes + "/" +content_type_uid + config.apis.entries;
-        options.qs.locale = locale_id;
-        options.qs.skip = 0;
-
-        return when.promise(function(resolve, reject){
-            self.getEntries(options)
-            .then(function(body){
-                entriesArray = entriesArray.concat(body.entries);
-                var totalRequests = Math.ceil(body.count/limit);
-                if(totalRequests > 1){
-                    var _getEntries = [];
-                    for(var i = 1;i < totalRequests;i++){
-                        _getEntries.push(function(i){
-                            return function(){
-                                var _options = options;
-                                _options.qs.skip = i * limit;
-                                return self.getEntries(_options)};
-                        }(i));
-                    }
-                    /*var guardTask = guard.bind(null, guard.n(1));
-                    _getEntries = _getEntries.map(guardTask);*/
-                    var taskResults = sequence(_getEntries);
-
-                    taskResults
-                    .then(function(results) {
-                        var data = {
-                            contentType_uid: content_type_uid,
-                            locale_id: locale_id
-                        }
-                        for( var e in results){
-                            entriesArray = entriesArray.concat(results[e].entries);
-                        }
-                        self.putEntries(data, entriesArray);
-                        return resolve()
-                    }).catch(function(e){
-                        reject(e);
-                    });
-
-                } else {
-                    var data = {
-                        contentType_uid: content_type_uid,
-                        locale_id: locale_id
-                    }
-                    self.putEntries(data, entriesArray);
-                    return resolve()
-                }
-            })
-            .catch(function(error){
-                errorLogger(error);
-                reject(error);
-            })
-        })
-
-    },
-    iterateContentTypes: function(){
-        var self = this;
-        return when.promise(function(resolve, reject){
-            var contentTypes = helper.readFile(path.join(contentTypesFolderPath, '__priority.json'));
-            var _getEntries = [];
-            if(contentTypes) {
-                successLogger("Found", contentTypes.length, "content types", "and", Object.keys(self.locales).length, "locales.");
-                for(var i = 0, total = contentTypes.length; i < total;i++){
-                    for(var key in self.locales){
-                        _getEntries.push(function(contentType_uid, locale_id){
-                            return function(){ return self.getAllEntriesOfContentType(contentType_uid, locale_id)};
-                        }(contentTypes[i], self.locales[key]['code']));
-                    }
-                }
-
-                var taskResults = sequence(_getEntries);
-
-                taskResults
-                .then(function(results) {
-                    //self.putEntries(results);
-                    return resolve(results);
-                });
+            if (apiDetails.skip > response.body.count) {
+              log.success(chalk.green('Completed fetching ' + apiDetails.content_type +
+                ' content type\'s entries in ' + apiDetails.locale + ' locale'));
+              return resolve();
             } else {
-                errorLogger("Please export content types before exporting entries.");
-                reject("Please export content types before exporting entries.")
+              apiDetails.skip += limit;
+              return self.getEntries(apiDetails).then(function () {
+                return resolve();
+              }).catch(function (error) {
+                return reject(error);
+              });
             }
-
+          });
+        } else {
+          if (apiDetails.skip > response.body.count) {
+            log.success(chalk.green('Completed exporting ' + apiDetails.content_type +
+              ' content type\'s entries in ' + apiDetails.locale + ' locale'));
+            return resolve();
+          } else {
+            apiDetails.skip += limit;
+            return self.getEntries(apiDetails).then(function () {
+              return resolve();
+            }).catch(function (error) {
+              return reject(error);
+            });
+          }
+        }
+      } else if (response.statusCode >= 500) {
+        return self.getEntries(apiDetails).then(function () {
+          return resolve();
+        }).catch(function (error) {
+          return reject(error);
         });
-
-    },
-    start: function(){
-        var self = this;
-        this.locales = helper.readFile(path.join(localesFolderPath, config.modules.locales.fileName)) || {};
-        this.locales['locale_key'] = base_locale;
-
-        return when.promise(function(){
-            self.iterateContentTypes()
-            .catch(function(err){
-                errorLogger(err)
-            })
-        })
-    }
+      } else if (response.statusCode >= 400 && response.statusCode <= 499) {
+        log.error(chalk.red('Content not found'));
+        log.error(chalk.black.bgWhite(JSON.stringify(response.body)));
+        return resolve();
+      } else {
+        log.error(chalk.red('Something went wrong while exporting entries'));
+        log.error(chalk.black.bgWhite(response.error || JSON.stringify(response.body)));
+        return reject(response.error || response.body);
+      }
+    }).catch(function (error) {
+      log.error(chalk.red('Unknown error while exporting entries'));
+      log.error(chalk.black.bgWhite(error));
+      return reject(error);
+    });
+  });
 };
 
-module.exports = ExportEntries;
+module.exports = new exportEntries();
