@@ -19,15 +19,15 @@ Update configuration details at config/index.js
 ```js
 'master_locale': 
 	{
-		'name': <<your stack's master locale>>,  // ex: 'English - United States'
-		'code': <<stack's master locale's code>> // ex: "en-us"
+		'name': << your stack master locale >>,  // ex: 'English - United States'
+		'code': << stack master locale code >> // ex: 'en-us'
 	}
 'email': << your registered e-mail address >>
 'password': << your account passwd >>
 // OR 
-'access_token': << your stack's access_token >> 
-'source_stack': << stack's api key >>
-'data': << location of the folder, where you'd want the exported content >> // ex: './_content'
+'access_token': << your stack access_token >> 
+'source_stack': << stack api key >>
+'data': << location of the folder, where you want the exported content >> // ex: './_content'
   ```
     
 ## Usage
