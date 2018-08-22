@@ -52,5 +52,8 @@ npm run export entries
 * It will migrate only latest published version of entry.
 * v0.0.2 does not support exporting Contentstack's Releases and Extensions
 
+### Known issues
+* It will migrate only latest published version of entry.
+
 ## License
 This project is licensed under MIT license
