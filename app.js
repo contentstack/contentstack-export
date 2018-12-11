@@ -9,6 +9,7 @@ var moduleExport;
 
 createClient(config, function (client) {
   global.client = client;
+  global.config = config;
 
   var modulesList = [
     'assets',
@@ -47,7 +48,6 @@ createClient(config, function (client) {
   }
 
   var taskResults = sequence(_export);
-
   taskResults.then(function () {
     log.success(chalk.blue('Stack with api key: ' + config.source_stack +
       ' has been exported succesfully!'));

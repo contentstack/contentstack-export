@@ -4,13 +4,13 @@ module.exports = {
     code: 'en-us' // mandatory
   },
   versioning: true,
-  email: '',
-  password: '',
+  email: "<Email-id>",
+  password: "<password>",
   // OR (either provide email + password OR access_token)
-  access_token: '',
+  access_token: '<access_token>',
 
   // Stack that needs to be exported
-  source_stack: '',
+  source_stack: '<api_token>',
   // Folder to which contents are to be exported
   data: './_contents',
   // host endpoint

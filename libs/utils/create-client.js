@@ -23,6 +23,7 @@ module.exports = function createClient(opts, callback) {
   }
 
   var urlObj = {
+
     protocol: (opts.port && opts.port == 443) ? 'https:' : 'http:',
     hostname: opts.host,
     pathname: opts.api_version ? opts.api_version : 'v3'
@@ -47,6 +48,7 @@ module.exports = function createClient(opts, callback) {
       method: 'POST'
     };
 
+
     return request(options, function (err, res, body) {
       if (err) {
         log.error('Failed to connect to Contentstack\n' + chalk.red((err || body)));
@@ -55,7 +57,13 @@ module.exports = function createClient(opts, callback) {
       if (res.statusCode === 200) {
         console.log(chalk.green('Contentstack account authenticated successfully!'));
         client.authtoken = body.user.authtoken;
-        return callback(client, config);
+        //console.log("callback>>>>>>>.", callback)
+        try{  
+          return callback(client, config);
+        //code that may throw exception  
+        }catch(Exception){
+          console.log("error", Exception)
+        }  
       } else if (res.statusCode >= 500) {
         console.log(chalk.yellow('Retrying account validation..'));
         return self.createClient(opts, callback);

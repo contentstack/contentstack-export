@@ -5,8 +5,8 @@ var Promise = require('bluebird');
 var chalk = require('chalk');
 var mkdirp = require('mkdirp');
 
-var request = Promise.promisify(require('request'));
-
+//var request = Promise.promisify(require('request'));
+var request = require('../utils/request');
 var config = require('../../config');
 var helper = require('../utils/helper');
 var log = require('../utils/log');

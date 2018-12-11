@@ -1,7 +1,7 @@
 /**
  * External module Dependencies.
  */
-var request = require('request');
+//var request = require('request');
 var mkdirp = require('mkdirp');
 var path = require('path');
 var when = require('when');
@@ -10,6 +10,7 @@ var chalk = require('chalk');
 /**
  * Internal module Dependencies.
  */
+var request = require('../utils/request');
 var config = require('../../config');
 var helper = require('../utils/helper');
 var log = require('../utils/log');
@@ -43,22 +44,22 @@ ExportEnvironments.prototype.start = function () {
   log.success(chalk.blue('Starting environment export'));
   var self = this;
   return when.promise(function (resolve, reject) {
-    return request(self.requestOptions, function (err, res, body) {
-      if (err) {
-        log.error(chalk.red('Ran into errors while exporting environments'));
-        log.error(chalk.red(err));
-        return reject(err);
-      }
+    return request(self.requestOptions).then(function (res) {
+      // if (err) {
+      //   log.error(chalk.red('Ran into errors while exporting environments'));
+      //   log.error(chalk.red(err));
+      //   return reject(err);
+      // }
       if (res.statusCode === 200) {
-        if (body.environments.length !== 0) {
-          log.success(chalk.green('Found ' + chalk.magenta(body.count) +
+        if (res.body.environments.length !== 0) {
+          log.success(chalk.green('Found ' + chalk.magenta(res.body.count) +
             ' environments in the Stack'));
-          for (var i = 0, total = body.count; i < total; i++) {
-            log.success(chalk.green('Exported ' + body.environments[i]['name'] +
+          for (var i = 0, total = res.body.count; i < total; i++) {
+            log.success(chalk.green('Exported ' + res.body.environments[i]['name'] +
               ' environment successfully'));
-            var env_uid = body.environments[i]['uid'];
+            var env_uid = res.body.environments[i]['uid'];
             self.master[env_uid] = '';
-            self.environments[env_uid] = body.environments[i];
+            self.environments[env_uid] = res.body.environments[i];
             delete self.environments[env_uid]['uid'];
             delete self.environments[env_uid]['SYS_ACL'];
           }
@@ -78,7 +79,6 @@ ExportEnvironments.prototype.start = function () {
       }
     });
   });
-
 };
 
 

@@ -1,7 +1,7 @@
 /**
  * External module Dependencies.
  */
-var request = require('request');
+//var request = require('request');
 var mkdirp = require('mkdirp');
 var path = require('path');
 var when = require('when');
@@ -10,6 +10,7 @@ var chalk = require('chalk');
 /**
  * Internal module Dependencies.
  */
+var request = require('../utils/request'); 
 var config = require('../../config');
 var helper = require('../utils/helper');
 var log = require('../utils/log');
@@ -51,18 +52,12 @@ ExportLocales.prototype.start = function () {
   log.success(chalk.blue('Starting locale export'));
   var self = this;
   return when.promise(function (resolve, reject) {
-    return request(self.requestOptions, function (err, res, body) {
-      if (err) {
-        log.error(chalk.red('Ran into errors while exporting locales'));
-        log.error(chalk.red(err));
-        return reject(err);
-      }
-
+    return request(self.requestOptions).then(function (res) {
       if (res.statusCode === 200) {
-        if (body.locales.length !== 0) {
-          log.success(chalk.green('Found ' + chalk.magenta(body.count) +
+        if (res.body.locales.length !== 0) {
+          log.success(chalk.green('Found ' + chalk.magenta(res.body.count) +
             ' locales in the Stack'));
-          body.locales.forEach(function (locale) {
+          res.body.locales.forEach(function (locale) {
             log.success(chalk.green('Exported ' + locale.name +
               ' locale successfully'));
             for (var key in locale) {
@@ -83,9 +78,14 @@ ExportLocales.prototype.start = function () {
         return self.start().then(resolve).catch(reject);
       } else {
         log.error(chalk.red('Ran into errors while exporting locales'));
-        log.error(chalk.red(err || JSON.stringify(body)));
-        return reject(err || body);
+        log.error(chalk.red(err || JSON.stringify(res.body)));
+        return reject(err || res.body);
       }
+    })
+    .catch (function (error) { 
+        log.error(chalk.red('Ran into errors while exporting locales'));
+        log.error(chalk.red(err));
+        return reject(err);
     });
   });
 };

@@ -6,8 +6,8 @@ var path = require('path');
 var chalk = require('chalk');
 
 var Promise = require('bluebird');
-var request = Promise.promisify(require('request'));
-
+//var request = Promise.promisify(require('request'));
+var request = require('../utils/request');
 /**
  * Internal module Dependencies.
  */
@@ -92,7 +92,7 @@ ExportContentTypes.prototype = {
           } else {
             return reject(response.error || response.body);
           }
-        } catch (error) {
+        }catch (error) {
           log.error(chalk.red('Content type export failed due to the following error: ' +
             error));
           return reject(error);
