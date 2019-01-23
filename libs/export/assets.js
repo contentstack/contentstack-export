@@ -1,7 +1,7 @@
 /**
  * External module Dependencies.
  */
-//var request = require('request');
+var nativeRequest = require('request');
 var mkdirp = require('mkdirp');
 var path = require('path');
 var fs = require('fs');
@@ -51,13 +51,11 @@ function exportAssets() {
   };
 }
 
-
 exportAssets.prototype = {
   start: function () {
     var self = this;
     return new Promise(function (resolve, reject) {
       return self.getAssetCount().then(function (count) {
-        //console.log("conts", count)
         if (typeof count !== 'number' || count === 0) {
           log.success('There were no assets to be download');
           return resolve();
@@ -66,18 +64,16 @@ exportAssets.prototype = {
           for (var i = 0; i <= count; i += bLimit) {
             assetBatches.push(i);
           }
-
-          //console.log("assetBatches",assetBatches)
           return Promise.map(assetBatches, function (batch) {
-            return self.getAssetJSON(batch).then(function (assetsJSON) {             
+            return self.getAssetJSON(batch).then(function (assetsJSON) {
               return Promise.map(assetsJSON, function (assetJSON) {
                 return self.getVersionedAssetJSON(assetJSON.uid, assetJSON._version).then(function () {
-                    self.assetContents[assetJSON.uid] = assetJSON;
-                    log.success(
-                      'The following asset has been downloaded successfully: ' +
-                      assetJSON.uid);
-                    return;
-                  }).catch(function (error) {
+                  self.assetContents[assetJSON.uid] = assetJSON;
+                  log.success(
+                    'The following asset has been downloaded successfully: ' +
+                    assetJSON.uid);
+                  return;
+                }).catch(function (error) {
                   log.error('The following asset failed to download\n' + JSON.stringify(
                     assetJSON));
                   log.error(error);
@@ -105,7 +101,7 @@ exportAssets.prototype = {
               log.success('Asset export completed successfully');
               return resolve();
             }).catch(function (error) {
-              throw error;
+              return reject(error)
             });
           }).catch(function (error) {
             log.error('Asset export failed due to the following errrors ' + JSON.stringify(
@@ -134,7 +130,7 @@ exportAssets.prototype = {
           return resolve();
         }).catch(function (error) {
           log.error('Error while exporting asset-folders!');
-          throw error;
+          return reject(error)
         });
       }).catch(function (error) {
         // error while fetching asset folder count
@@ -160,9 +156,9 @@ exportAssets.prototype = {
       };
 
       return request(_requestOption).then(function (response) {
-        // if (error) {
-        //   return reject(error);
-        // }
+        if (error) {
+          return reject(error);
+        }
 
         if (response.statusCode === 200) {
           body.assets.forEach(function (folder) {
@@ -184,8 +180,8 @@ exportAssets.prototype = {
           return reject(body);
         }
       }).catch(function (error) {
-            log.error(error);
-            return;
+        log.error(error);
+        return reject(error);
       });
     });
   },
@@ -202,7 +198,7 @@ exportAssets.prototype = {
         };
       }
 
-    return request(_requestOptions).then(function (response) {
+      return request(_requestOptions).then(function (response) {
         if (response.statusCode === 200) {
           return resolve(response.body.assets);
         } else if (response.statusCode >= 500) {
@@ -222,14 +218,12 @@ exportAssets.prototype = {
         } else {
           return reject(body);
         }
-    }).catch(function (error) {
-      console.log(error)
+      }).catch(function (error) {
         log.error(error);
-        return;
+        return reject(error);
       });
     });
   },
-
   getAssetJSON: function (skip) {
     var self = this;
     return new Promise(function (resolve, reject) {
@@ -244,8 +238,7 @@ exportAssets.prototype = {
         }
       };
 
-      return request(self.requestOption).then(function(response) {
-       // console.log(response)
+      return request(self.requestOption).then(function (response) {
         if (response.statusCode === 200) {
           return resolve(response.body.assets);
         } else if (response.statusCode >= 500) {
@@ -258,16 +251,13 @@ exportAssets.prototype = {
           return reject(body);
         }
 
-      }).catch(function(err){
-        console.log(err)
+      }).catch(function (err) {
         log.error(error)
       });
     });
   },
-
-getVersionedAssetJSON: function (uid, version, bucket) {
+  getVersionedAssetJSON: function (uid, version, bucket) {
     var self = this;
-    //console.log("self", self)
     var assetVersionInfo = bucket || [];
     return new Promise(function (resolve, reject) {
       if (version <= 0) {
@@ -275,7 +265,6 @@ getVersionedAssetJSON: function (uid, version, bucket) {
         helper.writeFile(assetVersionInfoFile, assetVersionInfo);
         return resolve();
       } else {
-        //console.log("uid", uid)
         self.requestOptionversion = {
           uri: client.endPoint + config.apis.assets + uid,
           headers: self.requestOption.headers,
@@ -286,8 +275,8 @@ getVersionedAssetJSON: function (uid, version, bucket) {
             }
           },
           json: true
-      };
-        return request(self.requestOptionversion) .then(function (response) {
+        };
+        return request(self.requestOptionversion).then(function (response) {
           if (response.statusCode === 200) {
             return self.downloadAsset(response.body.asset).then(function () {
               assetVersionInfo.splice(0, 0, response.body.asset);
@@ -313,9 +302,9 @@ getVersionedAssetJSON: function (uid, version, bucket) {
             return reject();
           }
         }).catch(function (error) {
-            // Error while downloading a particular version of an asset
-           log.error(error)
-           return reject(error);          
+          // Error while downloading a particular version of an asset
+          log.error(error)
+          return reject(error);
         });
       }
     });
@@ -330,16 +319,16 @@ getVersionedAssetJSON: function (uid, version, bucket) {
           asset.uid + ' }, as they already exist');
         return resolve();
       }
-       self.assetStream = {
+      self.assetStream = {
         url: asset.url
       };
 
-      var assetStreamRequest = request(self.assetStream);
-      assetStreamRequest.then(function (response) {
+      var assetStreamRequest = nativeRequest(self.assetStream);
+      assetStreamRequest.on('response', function (response) {
         if (response.statusCode === 200) {
           helper.makeDirectory(assetFolderPath);
           var assetFileStream = fs.createWriteStream(assetFilePath);
-         // assetStreamRequest.pipe(assetFileStream);
+          assetStreamRequest.pipe(assetFileStream);
           assetFileStream.on('close', function () {
             log.success('Successfully downloaded { file: ' + asset.filename + ', uid: ' +
               asset.uid + ' }');
@@ -354,11 +343,7 @@ getVersionedAssetJSON: function (uid, version, bucket) {
             '\nRequest returned with the following response: ' + response.statusCode);
           return reject();
         }
-      }).catch(function (error) {
-                // Error while downloading a particular version of an asset
-          log.error('Encountered error while downloading asset\n' + error);
-          return reject();
-        });
+      }).on('error', reject)
     });
   },
   getFolders: function () {

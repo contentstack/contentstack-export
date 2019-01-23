@@ -92,7 +92,7 @@ ExportContentTypes.prototype = {
           } else {
             return reject(response.error || response.body);
           }
-        }catch (error) {
+        } catch (error) {
           log.error(chalk.red('Content type export failed due to the following error: ' +
             error));
           return reject(error);

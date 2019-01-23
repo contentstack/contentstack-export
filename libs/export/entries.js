@@ -5,7 +5,6 @@ var Promise = require('bluebird');
 var chalk = require('chalk');
 var mkdirp = require('mkdirp');
 
-//var request = Promise.promisify(require('request'));
 var request = require('../utils/request');
 var config = require('../../config');
 var helper = require('../utils/helper');
@@ -85,7 +84,7 @@ exportEntries.prototype.getEntry = function (apiDetails) {
   return new Promise(function (resolve, reject) {
     var requestObject = {
       url: client.endPoint + config.apis.content_types + apiDetails.content_type + config.apis.entries +
-      apiDetails.uid,
+        apiDetails.uid,
       method: 'GET',
       headers: self.requestOptions.headers,
       qs: {

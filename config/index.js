@@ -1,14 +1,14 @@
 module.exports = {
-  master_locale: { // master locale of the stack
+  master_locale: { 
+    // master locale of the stack
     name: 'English - United States',
-    code: 'en-us' // mandatory
+    code: 'en-us'
   },
-  versioning: true,
-  email: "<Email-id>",
-  password: "<password>",
-  // OR (either provide email + password OR access_token)
+  versioning: false,
+  email: '<Email-id>',
+  password: '<password>',
+  // OR (either provide email + (password OR access_token))
   access_token: '<access_token>',
-
   // Stack that needs to be exported
   source_stack: '<api_token>',
   // Folder to which contents are to be exported
@@ -38,7 +38,7 @@ module.exports = {
       dirName: 'assets',
       fileName: 'assets.json',
       // This is the total no. of asset objects fetched in each 'get assets' call
-      batchLimit: 100,
+      batchLimit: 20,
       host: 'https://images.contentstack.io',
       invalidKeys: [
         'created_at',
