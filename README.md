@@ -19,12 +19,12 @@ Update configuration details at config/index.js
 ```js
 {
  master_locale: {
-  name: << stack master locale >>,  // ex: 'English - United States'
-  code: << stack master locale code >> // ex: 'en-us'
+  name: '', // Stack's master locale. ex: 'English - United States'
+  code: ''  // Stack master locale's code. ex: 'en-us'
  },
  source_stack: '' // Stack api_key
  access_token: '' // Stack access_token
- data: '' // Relative path to the directory, where exported data is to be stored. ex: './_content'
+ data: '' // Relative path to the directory, where exported data is to be stored. ex: './contents'
  ...
 }
 ```
@@ -32,18 +32,19 @@ Update configuration details at config/index.js
 ## Usage
 After setting the configuration, you'll can run the below given commands!
 
-### Export all modules [assets, locales, environments, content types and entries]
+1. Export all modules [ assets, locales, environments, content_types and entries ]
+
 ```bash
-npm run export 
+$ npm run export
 ```
   
-### Export a specific module
+2. Export a specific module
 ```bash
-npm run export-assets
-npm run export-env
-npm run export-locales
-npm run export-contenttypes
-npm run export-entries
+$ npm run export-assets
+$ npm run export-env
+$ npm run export-locales
+$ npm run export-contenttypes
+$ npm run export-entries
 ```
 > Note: Before exporting entries, you must export locales, assets and content types.
 
