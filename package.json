@@ -1,6 +1,6 @@
 {
   "name": "contentstack-export",
-  "version": "0.0.2",
+  "version": "2.0.1",
   "description": "Export utility of Contentstack",
   "homepage": "https://www.contentstack.com/",
   "author": {
@@ -13,7 +13,6 @@
     "lodash": "^4.17.2",
     "mkdirp": "^0.5.1",
     "request": "^2.88.0",
-    "when": "^3.7.7",
     "winston": "^2.2.0"
   },
   "main": "app.js",
