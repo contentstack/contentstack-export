@@ -14,7 +14,7 @@ var types = config.modules.types;
 
 if (process.argv.length === 3) {
   var val = process.argv[2];
-  if (val && modulesList.indexOf(val) > -1) {
+  if (val && types.indexOf(val) > -1) {
     var exportedModule = require('./lib/export/' + val);
     return exportedModule.start().then(function () {
       log.success(val + ' was exported successfully!');
@@ -22,6 +22,7 @@ if (process.argv.length === 3) {
     }).catch(function (error) {
       log.error('Failed to migrate ' + val);
       log.error(error);
+      return;
     })
   } else {
     log.error('Please provide valid module name.');

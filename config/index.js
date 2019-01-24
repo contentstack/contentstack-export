@@ -9,5 +9,5 @@ module.exports = {
   access_token: '',
 
   // Path where the exported data will be stored (relative path)
-  data: './_contents'
+  data: './contents'
 };
