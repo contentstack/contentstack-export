@@ -3,8 +3,12 @@ var config = require('./config');
 var util = require('./lib/util')
 var log = require('./lib/util/log');
 
-util.validateConfig(config)
 config = util.buildAppConfig(config)
+util.validateConfig(config)
+
+exports.getConfig = function () {
+  return config;
+};
 
 var types = config.modules.types;
 
@@ -24,16 +28,19 @@ if (process.argv.length === 3) {
     return 0;
   }
 } else if (process.argv.length === 2) {
+  var counter = 0;
   return Bluebird.map(types, function (type) {
-    log.info('Exporting: ' + type)
-    var exportedModule = require('./lib/export/' + val);
+    log.success('Exporting: ' + types[counter])
+    var exportedModule = require('./lib/export/' + types[counter]);
+    counter++
     return exportedModule.start()
   }, {
     concurrency: 1
   }).then(function () {
     log.success('Stack: ' + config.source_stack + ' has been exported succesfully!');
   }).catch(function (error) {
-    log.error('Failed to migrate stack: ' + config.source_stack + ' please check error logs for more info');
+    console.error(error)
+    log.error('Failed to migrate stack: ' + config.source_stack + '. Please check error logs for more info');
     log.error(error);
   });
 } else {
