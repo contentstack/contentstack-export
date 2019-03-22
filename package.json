@@ -18,6 +18,10 @@
   "main": "app.js",
   "maintainers": [
     {
+      "name": "rohitmishra",
+      "email": "rohit.mishra@contentstack.com"
+    },
+    {
       "name": "ninadhatkar",
       "email": "ninad.hatkar@raweng.com"
     },
@@ -36,7 +40,8 @@
     "export-entries": "node app.js entries",
     "export-contenttypes": "node app.js content_types",
     "export-locales": "node app.js locales",
-    "export-env": "node app.js environments"
+    "export-env": "node app.js environments",
+    "export-ext": "node app.js extensions"
   },
   "devDependencies": {
     "eslint": "^4.19.1"
