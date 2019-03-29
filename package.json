@@ -13,7 +13,8 @@
     "lodash": "^4.17.2",
     "mkdirp": "^0.5.1",
     "request": "^2.88.0",
-    "winston": "^2.2.0"
+    "winston": "^2.2.0",
+    "debug": "4.1.0"
   },
   "main": "app.js",
   "maintainers": [
@@ -27,14 +28,14 @@
     }
   ],
   "engines": {
-    "node": ">=8"
+    "node": ">=6"
   },
   "bugs": {
     "url": "https://github.com/contentstack/contentstack-export/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/builtio-contentstack/contentstack-export"
+    "url": "https://github.com/contentstack/contentstack-export"
   },
   "scripts": {
     "export": "node app.js",
