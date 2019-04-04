@@ -1,0 +1,12 @@
+{
+  "end_with_newline": true,
+  "indent_char": " ",
+  "indent_size": 2,
+  "preserve_newlines": true,
+  "wrap_line_length": 120,
+  "jslint_happy": true,
+  "operator_position": "preserve-newline",
+  "space_after_anon_function": true,
+  "space_after_named_function": true,
+  "space_before_conditional": true
+}

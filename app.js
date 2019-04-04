@@ -1,52 +1,50 @@
-var createClient    = require('./libs/utils/create-client'),
-    sequence         = require('when/sequence');
+var Bluebird = require('bluebird');
+var config = require('./config');
+var util = require('./lib/util')
+var log = require('./lib/util/log');
 
-global.config = require('./config');
+config = util.buildAppConfig(config)
+util.validateConfig(config)
 
-global.errorLogger = require("./libs/utils/logger.js")("error").error;
-global.successLogger = require("./libs/utils/logger.js")("success").log;
-global.warnLogger = require("./libs/utils/logger.js")("warn").log;
+exports.getConfig = function () {
+  return config;
+};
 
-createClient(config, function(client) {
-    global.client = client;
+var types = config.modules.types;
 
-    var modulesList = ['assets','locales','environments','contentTypes','entries'];
-    var _export = [];
-
-    if(process.argv.length == 3) {
-        var val = process.argv[2];
-        if(val && modulesList.indexOf(val) > -1) {
-            var ModuleExport = require('./libs/export/'+val+'.js');
-            var moduleExport = new ModuleExport();
-            _export.push(function(){
-                return moduleExport.start();
-            })
-        } else {
-            errorLogger("Please provide valid module name.");
-            return 0;
-        }
-    } else if(process.argv.length==2){
-        for(var i = 0, total = modulesList.length; i < total; i++) {
-            var ModuleExport = require('./libs/export/' + modulesList[i] + '.js');
-            var moduleExport = new ModuleExport();
-            _export.push(function(moduleExport){
-                return function(){ return moduleExport.start() } ;
-            }(moduleExport));
-        }
-    } else {
-        errorLogger("Only one module can be exported at a time.");
-        return 0;
-    }
-
-    var taskResults = sequence(_export);
-
-    taskResults
-    .then(function(results) {
-        successLogger("Migration has been completed.");
+if (process.argv.length === 3) {
+  var val = process.argv[2];
+  if (val && types.indexOf(val) > -1) {
+    var exportedModule = require('./lib/export/' + val);
+    return exportedModule.start().then(function () {
+      log.success(val + ' was exported successfully!');
+      return;
+    }).catch(function (error) {
+      log.error('Failed to migrate ' + val);
+      log.error(error);
+      return;
     })
-    .catch(function(error){
-        errorLogger(error);
-    });
-
-});
-
+  } else {
+    log.error('Please provide valid module name.');
+    return 0;
+  }
+} else if (process.argv.length === 2) {
+  var counter = 0;
+  return Bluebird.map(types, function (type) {
+    log.success('Exporting: ' + types[counter])
+    var exportedModule = require('./lib/export/' + types[counter]);
+    counter++
+    return exportedModule.start()
+  }, {
+    concurrency: 1
+  }).then(function () {
+    log.success('Stack: ' + config.source_stack + ' has been exported succesfully!');
+  }).catch(function (error) {
+    console.error(error)
+    log.error('Failed to migrate stack: ' + config.source_stack + '. Please check error logs for more info');
+    log.error(error);
+  });
+} else {
+  log.error('Only one module can be exported at a time.');
+  return 0;
+}

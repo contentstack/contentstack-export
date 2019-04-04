@@ -1,43 +1,60 @@
 {
   "name": "contentstack-export",
-  "version": "0.0.1",
-  "description": "Export data from built.io contentstack",
-  "homepage": "https://www.built.io/products/contentstack/overview",
+  "version": "1.0.0",
+  "description": "Exports Contentstack's stack contents",
+  "homepage": "https://www.contentstack.com/docs/tools-and-frameworks/content-migration/within-contentstack",
   "author": {
-    "name": "Built.io Contentstack",
-    "url": "https://www.built.io/"
+    "name": "Contentstack LLC <support@contentstack.com>",
+    "url": "https://www.contentstack.com/"
   },
   "license": "MIT",
   "dependencies": {
+    "bluebird": "^3.5.1",
     "lodash": "^4.17.2",
     "mkdirp": "^0.5.1",
-    "request": "^2.45.0",
-    "when": "^3.7.7",
-    "winston": "^2.2.0"
+    "request": "^2.88.0",
+    "winston": "^2.2.0",
+    "debug": "4.1.0"
   },
-  "license": "MIT",
   "main": "app.js",
   "maintainers": [
     {
+      "name": "rohitmishra",
+      "email": "rohit.mishra@contentstack.com"
+    },
+    {
       "name": "ninadhatkar",
-      "email": "ninad.hatkar@raweng.com"
+      "email": "ninad.hatkar@contentstack.com"
     },
     {
       "name": "mynk",
-      "email": "mayank@raweng.com"
+      "email": "mayank@contentstack.com"
     }
   ],
+  "engines": {
+    "node": ">=6"
+  },
+  "bugs": {
+    "url": "https://github.com/contentstack/contentstack-export/issues"
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/builtio-contentstack/contentstack-export"
+    "url": "https://github.com/contentstack/contentstack-export"
   },
   "scripts": {
-    "export" : "node app.js",
-    "export-assets": "node app.js dump=assets",
-    "export-entries": "node app.js dump=entries",
-    "export-contenttypes": "node app.js dump=contenttypes",
-    "export-locales": "node app.js dump=locales",
-    "export-env": "node app.js dump=environments"
+    "export": "node app.js",
+    "export-assets": "node app.js assets",
+    "export-entries": "node app.js entries",
+    "export-contenttypes": "node app.js content_types",
+    "export-locales": "node app.js locales",
+    "export-env": "node app.js environments"
+  },
+  "keywords": [
+    "contentstack",
+    "migration-utility",
+    "stack-backup"
+  ],
+  "devDependencies": {
+    "eslint": "^4.19.1"
   }
-
 }

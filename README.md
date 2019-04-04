@@ -1,8 +1,8 @@
-# Built.io Contentstack export tool
+# Contentstack Export Utility
 
-Built.io Contentstack is a headless CMS with an API-first approach that puts content at the centre. It is designed to simplify the process of publication by separating code from content.
+Contentstack is a headless CMS with an API-first approach that puts content at the centre. It is designed to simplify the process of publication by separating code from content.
 
-This utility helps you to export content from Contentstack. The content is exported in JSON format and stored in file system.
+This utility helps you to export content from Contentstack. The data is exported in JSON format and stored in file system.
 
 ## Installation
 
@@ -14,43 +14,49 @@ npm install
 
 ## Configuration
 
-Update configuration details at config/index.json :
+Update configuration details at config/index.js
 
+```js
+{
+ master_locale: {
+  name: '', // Stack's master locale. ex: 'English - United States'
+  code: ''  // Stack master locale's code. ex: 'en-us'
+ },
+ source_stack: '' // Stack api_key
+ access_token: '' // Stack access_token
+ data: '' // Relative path to the directory, where exported data is to be stored. ex: './contents'
+ ...
+}
 ```
-"base_locale": {"name": <<YOUR MASTER LOCALE NAME>>, "code":<<YOUR MASTER LOCALE CODE>>}
-"email": <<YOUR EMAIL ADDRESS>>
-"password" : <<PASSWORD>>
-"source_stack" : <<STACK_API_KEY>>
-"data": <<FOLDER PATH WHERE DATA SHOULD BE EXPORTED>>
-  ```
     
 ## Usage
-  
-After the configuration, you are ready to export content.
+After setting the configuration, you'll can run the below given commands!
 
-### Export all the modules :
+1. Export all modules [ assets, locales, environments, content_types and entries ]
 
-  ```
-  npm run export 
-  ```
-  
-### Export specific module :
-  
+```bash
+$ npm run export
 ```
-  npm run export <<module name>>
- ```
- 
- Module names and sequence can be as follows:
- 1. assets
- 2. environments
- 3. locales
- 4. contentTypes
- 5. entries
- 
-Note: Before exporting entries, you must export locales, assets and content types.
+  
+2. Export a specific module
+```bash
+$ npm run export-assets
+$ npm run export-env
+$ npm run export-locales
+$ npm run export-contenttypes
+$ npm run export-entries
+```
+> Note: Before exporting entries, you must export locales, assets and content types.
 
 ### Known issues
-* It will migrate only latest published version of entry.
+* If 2 assets share same uid and filename, only the first version of the asset would be available
+* The following contents are not supported
+	* Roles
+	* Users
+	* Releases
+	* Extensions
+	* Webhook
+    * Workflow
 
 ## License
 This project is licensed under MIT license
