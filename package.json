@@ -1,6 +1,6 @@
 {
   "name": "contentstack-export",
-  "version": "2.0.2",
+  "version": "1.0.0",
   "description": "Exports Contentstack's stack contents",
   "homepage": "https://www.contentstack.com/docs/tools-and-frameworks/content-migration/within-contentstack",
   "author": {
@@ -19,12 +19,16 @@
   "main": "app.js",
   "maintainers": [
     {
+      "name": "rohitmishra",
+      "email": "ninad.hatkar@contentstack.com"
+    },
+    {
       "name": "ninadhatkar",
-      "email": "ninad.hatkar@raweng.com"
+      "email": "ninad.hatkar@contentstack.com"
     },
     {
       "name": "mynk",
-      "email": "mayank@raweng.com"
+      "email": "mayank@contentstack.com"
     }
   ],
   "engines": {
