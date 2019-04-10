@@ -55,6 +55,8 @@ $ npm run export-entries
 	* Users
 	* Releases
 	* Extensions
+	* Webhook
+    * Workflow
 
 ## License
 This project is licensed under MIT license

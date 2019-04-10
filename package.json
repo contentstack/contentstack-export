@@ -1,10 +1,10 @@
 {
   "name": "contentstack-export",
-  "version": "2.0.1",
+  "version": "1.0.0",
   "description": "Exports Contentstack's stack contents",
-  "homepage": "https://www.contentstack.com/",
+  "homepage": "https://www.contentstack.com/docs/tools-and-frameworks/content-migration/within-contentstack",
   "author": {
-    "name": "Contentstack Ecosystem",
+    "name": "Contentstack LLC <support@contentstack.com>",
     "url": "https://www.contentstack.com/"
   },
   "license": "MIT",
@@ -13,7 +13,8 @@
     "lodash": "^4.17.2",
     "mkdirp": "^0.5.1",
     "request": "^2.88.0",
-    "winston": "^2.2.0"
+    "winston": "^2.2.0",
+    "debug": "4.1.0"
   },
   "main": "app.js",
   "maintainers": [
@@ -23,16 +24,22 @@
     },
     {
       "name": "ninadhatkar",
-      "email": "ninad.hatkar@raweng.com"
+      "email": "ninad.hatkar@contentstack.com"
     },
     {
       "name": "mynk",
-      "email": "mayank@raweng.com"
+      "email": "mayank@contentstack.com"
     }
   ],
+  "engines": {
+    "node": ">=6"
+  },
+  "bugs": {
+    "url": "https://github.com/contentstack/contentstack-export/issues"
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/builtio-contentstack/contentstack-export"
+    "url": "https://github.com/contentstack/contentstack-export"
   },
   "scripts": {
     "export": "node app.js",
@@ -43,6 +50,11 @@
     "export-env": "node app.js environments",
     "export-ext": "node app.js extensions"
   },
+  "keywords": [
+    "contentstack",
+    "migration-utility",
+    "stack-backup"
+  ],
   "devDependencies": {
     "eslint": "^4.19.1"
   }
