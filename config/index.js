@@ -5,6 +5,8 @@ module.exports = {
     code: 'en-us'
   },
   // Stack that needs to be exported
+  email: '',
+  password: '',
   source_stack: '',
   access_token: '',
 

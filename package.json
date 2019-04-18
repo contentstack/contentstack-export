@@ -1,6 +1,6 @@
 {
   "name": "contentstack-export",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Exports Contentstack's stack contents",
   "homepage": "https://www.contentstack.com/docs/tools-and-frameworks/content-migration/within-contentstack",
   "author": {
@@ -47,7 +47,8 @@
     "export-entries": "node app.js entries",
     "export-contenttypes": "node app.js content_types",
     "export-locales": "node app.js locales",
-    "export-env": "node app.js environments"
+    "export-env": "node app.js environments",
+    "export-web": "node app.js webhooks"
   },
   "keywords": [
     "contentstack",

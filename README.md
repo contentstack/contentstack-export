@@ -54,8 +54,6 @@ $ npm run export-entries
 	* Roles
 	* Users
 	* Releases
-	* Extensions
-	* Webhook
     * Workflow
 
 ## License
