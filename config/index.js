@@ -9,6 +9,6 @@ module.exports = {
   source_stack: '<API-KEY>',
   access_token: '<ACCESS-TOKEN>',
   
-  // Path where the exported data will be stored (relative path)
+    // Path where the exported data will be stored (relative path)
   data: './contents'
 };

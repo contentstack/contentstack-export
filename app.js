@@ -1,6 +1,7 @@
 var Bluebird = require('bluebird');
+var util = require('./lib/util');
+var login = require('./lib/util/login');
 var config = require('./config');
-var util = require('./lib/util')
 var log = require('./lib/util/log');
 
 config = util.buildAppConfig(config)
@@ -10,6 +11,8 @@ exports.getConfig = function () {
   return config;
 };
 
+
+login(config).then(function () {
 var types = config.modules.types;
 
 if (process.argv.length === 3) {
@@ -50,3 +53,4 @@ if (process.argv.length === 3) {
   log.error('Only one module can be exported at a time.');
   return 0;
 }
+});

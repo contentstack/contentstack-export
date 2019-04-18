@@ -8,6 +8,7 @@ module.exports = {
       'locales',
       'environments',
       'extensions',
+      'webhooks',
       'content_types',
       'entries'
       
@@ -24,6 +25,10 @@ module.exports = {
     environments: {
       dirName: 'environments',
       fileName: 'environments.json'
+    },
+    webhooks: {
+      dirName: 'webhooks',
+      fileName: 'webhooks.json'
     },
     assets: {
       dirName: 'assets',
@@ -48,6 +53,7 @@ module.exports = {
       validKeys: [
         'title',
         'uid',
+        'field_rules',
         'schema',
         'options',
         'singleton',
@@ -67,6 +73,8 @@ module.exports = {
         '_metadata',
         'published'
       ],
+      batchLimit: 20,
+      downloadLimit: 5,
       // total no of entries fetched in each content type in a single call
       limit: 100
     },
@@ -84,6 +92,7 @@ module.exports = {
     content_types: '/content_types/',
     entries: '/entries/',
     users: '/stacks',
-    extension: '/extensions'
+    extension: '/extensions',
+    webhooks: '/webhooks/'
   }
 }
