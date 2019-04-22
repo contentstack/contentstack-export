@@ -8,7 +8,7 @@ module.exports = {
   email: '',
   password: '',
   source_stack: '',
-  access_token: '',
+  access_token: '', 
 
   // Path where the exported data will be stored (relative path)
   data: './contents'
