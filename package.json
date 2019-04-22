@@ -48,6 +48,7 @@
     "export-contenttypes": "node app.js content_types",
     "export-locales": "node app.js locales",
     "export-env": "node app.js environments",
+    "export-ext": "node app.js extensions",
     "export-web": "node app.js webhooks"
   },
   "keywords": [

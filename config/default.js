@@ -7,9 +7,11 @@ module.exports = {
       'assets',
       'locales',
       'environments',
+      'extensions',
       'webhooks',
       'content_types',
       'entries'
+      
     ],
     locales: {
       dirName: 'locales',
@@ -75,6 +77,11 @@ module.exports = {
       downloadLimit: 5,
       // total no of entries fetched in each content type in a single call
       limit: 100
+    },
+    
+    extensions: {
+      dirName: 'extensions',
+      fileName: 'extensions.json'
     }
   },
   apis: {
@@ -84,6 +91,8 @@ module.exports = {
     assets: '/assets/',
     content_types: '/content_types/',
     entries: '/entries/',
+    users: '/stacks',
+    extension: '/extensions',
     webhooks: '/webhooks/'
   }
 }
