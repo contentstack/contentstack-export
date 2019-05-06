@@ -16,7 +16,8 @@ module.exports = {
       requiredKeys: [
         'code',
         'uid',
-        'name'
+        'name',
+        'fallback_locale'
       ]
     },
     environments: {
