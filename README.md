@@ -22,6 +22,8 @@ Update configuration details at config/index.js
   name: '', // Stack's master locale. ex: 'English - United States'
   code: ''  // Stack master locale's code. ex: 'en-us'
  },
+ email: '', // Your registered email id
+ password: '', // Account password
  source_stack: '' // Stack api_key
  access_token: '' // Stack access_token
  data: '' // Relative path to the directory, where exported data is to be stored. ex: './contents'
@@ -43,6 +45,8 @@ $ npm run export
 $ npm run export-assets
 $ npm run export-env
 $ npm run export-locales
+$ npm run export-extensions
+$ npm run export-webhooks
 $ npm run export-contenttypes
 $ npm run export-entries
 ```

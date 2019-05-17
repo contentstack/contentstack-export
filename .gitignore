@@ -2,5 +2,3 @@ node_modules
 package-lock.json
 contents
 logs
-lib/export/roles.js
-lib/export/users.js
