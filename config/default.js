@@ -1,6 +1,6 @@
 module.exports = {
   versioning: false,
-  host: 'https://api.contentstack.io/v3',
+  host: 'https://dev-new-api.contentstack.io/v3',
   cdn: 'https://cdn.contentstack.io/v3',
   modules: {
     types: [
