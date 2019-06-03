@@ -53,4 +53,9 @@ if (process.argv.length === 3) {
   log.error('Only one module can be exported at a time.');
   return 0;
 }
-});
+}).catch(function(error) {
+  log.error('Fail to login with credentials:' + config.email + '. Please check error logs for more info');
+  log.error(error);
+  return 0;
+}
+);
