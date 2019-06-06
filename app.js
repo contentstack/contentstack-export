@@ -54,7 +54,7 @@ if (process.argv.length === 3) {
   return 0;
 }
 }).catch(function(error) {
-  log.error('Fail to login with credentials:' + config.email + '. Please check error logs for more info');
+  log.error('Fail to login: ' + error.body.error_message);
   log.error(error);
   return 0;
 }
