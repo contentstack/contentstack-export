@@ -4,14 +4,14 @@ module.exports = {
   cdn: 'https://cdn.contentstack.io/v3',
   modules: {
     types: [
+      'stack',
       'assets',
       'locales',
       'environments',
       'extensions',
       'webhooks',
       'content_types',
-      'entries'
-      
+      'entries',
     ],
     locales: {
       dirName: 'locales',
@@ -78,10 +78,13 @@ module.exports = {
       // total no of entries fetched in each content type in a single call
       limit: 100
     },
-    
     extensions: {
       dirName: 'extensions',
       fileName: 'extensions.json'
+    },
+    stack: {
+      dirName: 'stack',
+      fileName: 'stack.json'
     }
   },
   apis: {
@@ -93,6 +96,7 @@ module.exports = {
     entries: '/entries/',
     users: '/stacks',
     extension: '/extensions',
-    webhooks: '/webhooks/'
+    webhooks: '/webhooks/',
+    stacks: '/stacks/'
   }
 }

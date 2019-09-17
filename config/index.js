@@ -4,12 +4,15 @@ module.exports = {
     name: 'English - United States',
     code: 'en-us'
   },
-  // Stack that needs to be exported
+  // Credentials
   email: '',
   password: '',
-  source_stack: '',
-  access_token: '', 
 
+  // Stack API KEY
+  source_stack: '',
+  // Stack ACCESS TOKEN
+
+  access_token: '',
   // Path where the exported data will be stored (relative path)
   data: './contents'
 };
