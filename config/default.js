@@ -4,6 +4,7 @@ module.exports = {
   cdn: 'https://cdn.contentstack.io/v3',
   modules: {
     types: [
+      'snippets',
       'assets',
       'locales',
       'environments',
@@ -29,6 +30,10 @@ module.exports = {
     webhooks: {
       dirName: 'webhooks',
       fileName: 'webhooks.json'
+    },
+    snippets: {
+      dirName: 'snippets',
+      fileName: 'snippets.json'
     },
     assets: {
       dirName: 'assets',
@@ -86,6 +91,7 @@ module.exports = {
   },
   apis: {
     userSession: '/user-session/',
+    snippets: '/content_types_snippets/',
     locales: '/locales/',
     environments: '/environments/',
     assets: '/assets/',
