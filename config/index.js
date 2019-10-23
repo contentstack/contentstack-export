@@ -4,12 +4,14 @@ module.exports = {
     name: 'English - United States',
     code: 'en-us'
   },
-  // Stack that needs to be exported
-  email: '',
-  password: '',
-  source_stack: '',
-  access_token: '', 
+  // Credentials
+  email: 'harshal.patel@contentstack.com',
+  password: 'raw@1234',
 
+  // Stack API KEY
+  source_stack: 'blt35314d09aa341720',
+  // Stack ACCESS TOKEN
+  access_token: 'blt520bd752df4bb6cf',
   // Path where the exported data will be stored (relative path)
-  data: './contents'
+  data: './_contents'
 };
