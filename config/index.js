@@ -5,13 +5,13 @@ module.exports = {
     code: 'en-us'
   },
   // Credentials
-  email: 'harshal.patel@contentstack.com',
-  password: 'raw@1234',
+  email: '',
+  password: '',
 
   // Stack API KEY
-  source_stack: 'blt35314d09aa341720',
+  source_stack: '',
   // Stack ACCESS TOKEN
-  access_token: 'blt520bd752df4bb6cf',
+  access_token: '',
   // Path where the exported data will be stored (relative path)
-  data: './_contents'
+  data: './_contents_new'
 };
