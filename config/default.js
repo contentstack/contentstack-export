@@ -91,7 +91,7 @@ module.exports = {
   },
   apis: {
     userSession: '/user-session/',
-    globalfields: '/content_types_snippets/',
+    globalfields: '/global_fields/',
     locales: '/locales/',
     environments: '/environments/',
     assets: '/assets/',
