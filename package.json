@@ -47,6 +47,7 @@
     "export-entries": "node app.js entries",
     "export-contenttypes": "node app.js content_types",
     "export-locales": "node app.js locales",
+    "export-globalfields": "node app.js globalfields",
     "export-env": "node app.js environments",
     "export-extensions": "node app.js extensions",
     "export-webhooks": "node app.js webhooks"
