@@ -9,7 +9,7 @@ module.exports = {
       'environments',
       'extensions',
       'webhooks',
-      'globalfields',
+      'global_fields',
       'content_types',
       'entries'
       
@@ -33,7 +33,7 @@ module.exports = {
       fileName: 'webhooks.json'
     },
     globalfields: {
-      dirName: 'globalfields',
+      dirName: 'global_fields',
       fileName: 'globalfields.json'
     },
     assets: {
