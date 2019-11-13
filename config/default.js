@@ -34,7 +34,15 @@ module.exports = {
     },
     globalfields: {
       dirName: 'global_fields',
-      fileName: 'globalfields.json'
+      fileName: 'globalfields.json',
+      validKeys: [
+        'title',
+        'uid',
+        'schema',
+        'options',
+        'singleton',
+        'description'
+      ]
     },
     assets: {
       dirName: 'assets',
