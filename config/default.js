@@ -1,6 +1,6 @@
 module.exports = {
   versioning: false,
-  host: 'https://stag-api.contentstack.io/v3',
+  host: 'https://api.contentstack.io/v3',
   cdn: 'https://cdn.contentstack.io/v3',
   modules: {
     types: [
@@ -34,7 +34,15 @@ module.exports = {
     },
     globalfields: {
       dirName: 'global_fields',
-      fileName: 'globalfields.json'
+      fileName: 'globalfields.json',
+      validKeys: [
+        'title',
+        'uid',
+        'schema',
+        'options',
+        'singleton',
+        'description'
+      ]
     },
     assets: {
       dirName: 'assets',
