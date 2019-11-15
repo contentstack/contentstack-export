@@ -47,6 +47,7 @@ $ npm run export-env
 $ npm run export-locales
 $ npm run export-extensions
 $ npm run export-webhooks
+$ npm run export-globalfields
 $ npm run export-contenttypes
 $ npm run export-entries
 ```
