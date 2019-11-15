@@ -34,7 +34,7 @@ Update configuration details at config/index.js
 ## Usage
 After setting the configuration, you'll can run the below given commands!
 
-1. Export all modules [ assets, locales, environments, extensions, webhooks, content_types and entries ]
+1. Export all modules [ assets, locales, environments, extensions, webhooks, global_fields, content_types and entries ]
 
 ```bash
 $ npm run export
@@ -47,6 +47,7 @@ $ npm run export-env
 $ npm run export-locales
 $ npm run export-extensions
 $ npm run export-webhooks
+$ npm run export-globalfields
 $ npm run export-contenttypes
 $ npm run export-entries
 ```

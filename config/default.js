@@ -10,6 +10,7 @@ module.exports = {
       'environments',
       'extensions',
       'webhooks',
+      'global_fields',
       'content_types',
       'entries',
     ],
@@ -19,7 +20,8 @@ module.exports = {
       requiredKeys: [
         'code',
         'uid',
-        'name'
+        'name',
+        'fallback_locale'
       ]
     },
     environments: {
@@ -29,6 +31,18 @@ module.exports = {
     webhooks: {
       dirName: 'webhooks',
       fileName: 'webhooks.json'
+    },
+    globalfields: {
+      dirName: 'global_fields',
+      fileName: 'globalfields.json',
+      validKeys: [
+        'title',
+        'uid',
+        'schema',
+        'options',
+        'singleton',
+        'description'
+      ]
     },
     assets: {
       dirName: 'assets',
@@ -89,6 +103,7 @@ module.exports = {
   },
   apis: {
     userSession: '/user-session/',
+    globalfields: '/global_fields/',
     locales: '/locales/',
     environments: '/environments/',
     assets: '/assets/',
