@@ -22,7 +22,7 @@ if (process.argv.length === 3) {
     var exportedModule = require('./lib/export/' + val);
     
     return exportedModule.start().then(function () {
-      log.success(val + ' was exported successfully!');
+      log.success(val + ' were exported successfully!');
       return;
     }).catch(function (error) {
       log.error('Failed to migrate ' + val);

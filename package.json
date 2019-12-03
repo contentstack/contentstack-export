@@ -9,12 +9,12 @@
   },
   "license": "MIT",
   "dependencies": {
-    "bluebird": "^3.5.1",
-    "lodash": "^4.17.2",
-    "mkdirp": "^0.5.1",
-    "request": "^2.88.0",
-    "winston": "^2.2.0",
-    "debug": "4.1.0"
+    "bluebird": "3.5.1",
+    "debug": "4.1.0",
+    "lodash": "4.17.15",
+    "mkdirp": "0.5.1",
+    "request": "2.88.0",
+    "winston": "2.2.0"
   },
   "main": "app.js",
   "maintainers": [
@@ -50,7 +50,8 @@
     "export-globalfields": "node app.js global_fields",
     "export-env": "node app.js environments",
     "export-extensions": "node app.js extensions",
-    "export-webhooks": "node app.js webhooks"
+    "export-webhooks": "node app.js webhooks",
+    "export-labels": "node app.js labels"
   },
   "keywords": [
     "contentstack",
@@ -58,6 +59,6 @@
     "stack-backup"
   ],
   "devDependencies": {
-    "eslint": "^4.19.1"
+    "eslint": "4.19.1"
   }
 }

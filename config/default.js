@@ -13,6 +13,7 @@ module.exports = {
       'global_fields',
       'content_types',
       'entries',
+      'labels'
     ],
     locales: {
       dirName: 'locales',
@@ -31,6 +32,19 @@ module.exports = {
     webhooks: {
       dirName: 'webhooks',
       fileName: 'webhooks.json'
+    },
+    labels: {
+      dirName: 'labels',
+      fileName: 'labels.json',
+      invalidKeys: [
+        'created_at',
+        'updated_at',
+        'created_by',
+        'updated_by',
+        'api_key',
+        'org_uid',
+        '_version'      
+      ]
     },
     globalfields: {
       dirName: 'global_fields',
@@ -112,6 +126,7 @@ module.exports = {
     users: '/stacks',
     extension: '/extensions',
     webhooks: '/webhooks/',
-    stacks: '/stacks/'
+    stacks: '/stacks/',
+    'labels': '/labels/'
   }
 }
