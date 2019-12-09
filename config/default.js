@@ -4,15 +4,15 @@ module.exports = {
   cdn: 'https://cdn.contentstack.io/v3',
   modules: {
     types: [
-      // 'stack',
-      // 'assets',
-      // 'locales',
-      // 'environments',
-      // 'extensions',
-      // 'webhooks',
-      // 'global_fields',
-      // 'content_types',
-      // 'entries',
+      'stack',
+      'assets',
+      'locales',
+      'environments',
+      'extensions',
+      'webhooks',
+      'global_fields',
+      'content_types',
+      'entries',
       'labels'
     ],
     locales: {
