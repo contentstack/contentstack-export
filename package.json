@@ -9,11 +9,11 @@
   },
   "license": "MIT",
   "dependencies": {
-    "bluebird": "^3.5.1",
-    "lodash": "^4.17.2",
-    "mkdirp": "^0.5.1",
-    "request": "^2.88.0",
-    "winston": "^2.2.0",
+    "bluebird": "3.5.1",
+    "lodash": "4.17.2",
+    "mkdirp": "0.5.1",
+    "request": "2.88.0",
+    "winston": "2.2.0",
     "debug": "4.1.0"
   },
   "main": "app.js",
@@ -58,6 +58,6 @@
     "stack-backup"
   ],
   "devDependencies": {
-    "eslint": "^4.19.1"
+    "eslint": "4.19.1"
   }
 }
