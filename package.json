@@ -1,6 +1,6 @@
 {
   "name": "contentstack-export",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Exports Contentstack's stack contents",
   "homepage": "https://www.contentstack.com/docs/tools-and-frameworks/content-migration/within-contentstack",
   "author": {
@@ -9,11 +9,11 @@
   },
   "license": "MIT",
   "dependencies": {
-    "bluebird": "^3.5.1",
-    "lodash": "^4.17.2",
-    "mkdirp": "^0.5.1",
-    "request": "^2.88.0",
-    "winston": "^2.2.0",
+    "bluebird": "3.5.1",
+    "lodash": "4.17.2",
+    "mkdirp": "0.5.1",
+    "request": "2.88.0",
+    "winston": "2.2.0",
     "debug": "4.1.0"
   },
   "main": "app.js",
@@ -47,6 +47,7 @@
     "export-entries": "node app.js entries",
     "export-contenttypes": "node app.js content_types",
     "export-locales": "node app.js locales",
+    "export-labels": "node app.js labels",
     "export-globalfields": "node app.js global_fields",
     "export-env": "node app.js environments",
     "export-extensions": "node app.js extensions",
@@ -58,6 +59,6 @@
     "stack-backup"
   ],
   "devDependencies": {
-    "eslint": "^4.19.1"
+    "eslint": "4.19.1"
   }
 }
