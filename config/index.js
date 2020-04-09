@@ -5,13 +5,13 @@ module.exports = {
     code: 'en-us'
   },
   // Credentials
-  email: '',
-  password: '',
+  email: '',   // (optional)
+  password: '', // (optional)
 
   // Stack API KEY
-  source_stack: '',
-  // Stack ACCESS TOKEN
-  access_token: '',
+  source_stack: '',             // mandatory
+  // management_token: 'csce165f6f43c8a8cfa7401b61',  // mandatory
+  management_token: '',  // mandatory
   // Path where the exported data will be stored (relative path)
   data: './contents'
 };
