@@ -10,8 +10,8 @@ module.exports = {
 
   // Stack API KEY
   source_stack: '',             // mandatory
-  // management_token: 'csce165f6f43c8a8cfa7401b61',  // mandatory
-  management_token: '',  // mandatory
+  access_token: '',
+  management_token: '',    
   // Path where the exported data will be stored (relative path)
   data: './contents'
 };
