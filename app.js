@@ -57,5 +57,4 @@ login(config).then(function () {
     log.error('Only one module can be exported at a time.');
     return 0;
   }
-
 });
