@@ -9,8 +9,8 @@ module.exports = {
   password: '', // (optional)
 
   // Stack API KEY
-  source_stack: '231344233',             // mandatory
-  access_token: 'eeeeeeeeeee',
+  source_stack: '',             // mandatory
+  access_token: '',
   management_token: '',    
   // Path where the exported data will be stored (relative path)
   data: './contents'
