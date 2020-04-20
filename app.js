@@ -36,7 +36,7 @@ login(config).then(function () {
   } else if (process.argv.length === 2) {
     var counter = 0;
     return Bluebird.map(types, function (type) {
-      if(config.preserveStackVersion && type != 'stack') {
+      if(!config.preserveStackVersion && type != 'stack') {
         log.success('Exporting: ' + types[counter])
         var exportedModule = require('./lib/export/' + types[counter]);
         counter++
