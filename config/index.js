@@ -7,7 +7,6 @@ module.exports = {
   // Credentials
   email: '',   // (optional)
   password: '', // (optional)
-
   // Stack API KEY
   source_stack: '',             // mandatory
   access_token: '',
