@@ -1,3 +1,4 @@
+/* eslint-disable no-redeclare */
 var Bluebird = require('bluebird');
 var util = require('./lib/util');
 var login = require('./lib/util/login');
@@ -36,13 +37,19 @@ login(config).then(function () {
   } else if (process.argv.length === 2) {
     var counter = 0;
     return Bluebird.map(types, function (type) {
-      if(!config.preserveStackVersion && type != 'stack') {
+      if(config.preserveStackVersion) {
         log.success('Exporting: ' + types[counter])
         var exportedModule = require('./lib/export/' + types[counter]);
         counter++
         return exportedModule.start()
-      } else {
+      } else  {
+        if(type === 'stack') {
+          counter = 1;
+        }
+        log.success('Exporting: ' + types[counter])
+        var exportedModule = require('./lib/export/' + types[counter]);
         counter++
+        return exportedModule.start()
       }
     }, {
       concurrency: 1
