@@ -42,14 +42,13 @@ login(config).then(function () {
         var exportedModule = require('./lib/export/' + types[counter]);
         counter++
         return exportedModule.start()
-      } else  {
-        if(type === 'stack') {
-          counter = 1;
-        }
+      } else if(!config.preserveStackVersion && type !== 'stack')  {
         log.success('Exporting: ' + types[counter])
         var exportedModule = require('./lib/export/' + types[counter]);
         counter++
         return exportedModule.start()
+      } else {
+        counter++
       }
     }, {
       concurrency: 1
