@@ -26,6 +26,7 @@ Update configuration details at config/index.js
  password: '', // Account password
  source_stack: '' // Stack api_key
  access_token: '' // Stack access_token
+ management_token: '' //Stack management_token
  data: '' // Relative path to the directory, where exported data is to be stored. ex: './contents'
  ...
 }
@@ -54,10 +55,11 @@ $ npm run export-labels
 
 ```
 > Note: Before exporting entries, you must export locales, assets and content types.
+> Note: If you keep the value of preserveStackVersion to true, then you will have to provide the email and password mandatorily in the config file, the management token will not work in that case.
 
-### Known issues
+### Known Limitations and Issues
 * If 2 assets share same uid and filename, only the first version of the asset would be available
-* The following contents are not supported
+* Does not support the following
 	* Roles
 	* Users
 	* Releases
