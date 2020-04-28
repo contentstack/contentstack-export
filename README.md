@@ -55,6 +55,7 @@ $ npm run export-labels
 
 ```
 > Note: Before exporting entries, you must export locales, assets and content types.
+
 > Note: If you keep the value of preserveStackVersion to true, then you will have to provide the email and password mandatorily in the config file, the management token will not work in that case.
 
 ### Known Limitations and Issues
