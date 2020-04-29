@@ -119,5 +119,6 @@ module.exports = {
     extension: '/extensions',
     webhooks: '/webhooks/',
     stacks: '/stacks/'
-  }
+  },
+  preserveStackVersion: false
 }
