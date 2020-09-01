@@ -14,7 +14,17 @@ npm install
 
 ## Configuration
 
-Update configuration details at config/index.js
+Set the following environment variables before running:
+
+```shell
+CONTENTSTACK_EMAIL=YourEmailAddress@yourdomain ; export CONTENTSTACK_EMAIL
+CONTENTSTACK_PASSWORD=YourSecretPassword ; export CONTENTSTACK_PASSWORD
+CONTENTSTACK_STACK_API_KEY=YourStackAPIKey ; export CONTENTSTACK_STACK_API_KEY
+CONTENTSTACK_MANAGEMENT_TOKEN=YourManagementToken ; export CONTENTSTACK_MANAGEMENT_TOKEN
+CONTENTSTACK_ACCESS_TOKEN=YourAccessToken ; export CONTENTSTACK_ACCESS_TOKEN
+```
+
+To override the default locale, edit [`config/index.js`](config/index.js):
 
 ```js
 {
@@ -22,12 +32,6 @@ Update configuration details at config/index.js
   name: '', // Stack's master locale. ex: 'English - United States'
   code: ''  // Stack master locale's code. ex: 'en-us'
  },
- email: '', // Your registered email id
- password: '', // Account password
- source_stack: '' // Stack api_key
- access_token: '' // Stack access_token
- management_token: '' //Stack management_token
- data: '' // Relative path to the directory, where exported data is to be stored. ex: './contents'
  ...
 }
 ```
