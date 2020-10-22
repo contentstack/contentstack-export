@@ -1,6 +1,6 @@
 {
   "name": "contentstack-export",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "Exports Contentstack's stack contents",
   "homepage": "https://www.contentstack.com/docs/tools-and-frameworks/content-migration/within-contentstack",
   "author": {
