@@ -12,5 +12,6 @@ module.exports = {
   access_token: '',
   management_token: '',    
   // Path where the exported data will be stored (relative path)
-  data: './contents'
+  data: './contents',
+  environment: '' // (optional)
 };
