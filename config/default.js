@@ -1,4 +1,6 @@
-module.exports = {
+var _ = require('lodash')
+
+const defaultConfig = {
   versioning: false,
   host: 'https://api.contentstack.io/v3',
   cdn: 'https://cdn.contentstack.io/v3',
@@ -110,7 +112,7 @@ module.exports = {
     userSession: '/user-session/',
     globalfields: '/global_fields/',
     locales: '/locales/',
-    labels: '/labels/',    
+    labels: '/labels/',
     environments: '/environments/',
     assets: '/assets/',
     content_types: '/content_types/',
@@ -121,4 +123,15 @@ module.exports = {
     stacks: '/stacks/'
   },
   preserveStackVersion: false
+}
+
+module.exports = function (useEUApi) {
+  if (!useEUApi) return defaultConfig;
+
+  const euHosts = {
+    host: 'https://eu-api.contentstack.com/v3',
+    cdn: 'https://eu-cdn.contentstack.com/v3',
+  }
+
+  return _.merge(defaultConfig, euHosts);
 }
