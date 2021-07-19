@@ -28,10 +28,11 @@ Update configuration details at config/index.js
  access_token: '' // Stack access_token
  management_token: '' //Stack management_token
  data: '' // Relative path to the directory, where exported data is to be stored. ex: './contents'
+ useEUApi: false // Set to true if your stacks are hosted in the Europe
  ...
 }
 ```
-    
+
 ## Usage
 After setting the configuration, you'll can run the below given commands!
 
@@ -40,7 +41,7 @@ After setting the configuration, you'll can run the below given commands!
 ```bash
 $ npm run export
 ```
-  
+
 2. Export a specific module
 ```bash
 $ npm run export-assets
