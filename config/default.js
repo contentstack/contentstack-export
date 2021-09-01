@@ -64,7 +64,8 @@ module.exports = {
         'published'
       ],
       // no of asset version files (of a single asset) that'll be downloaded parallelly
-      downloadLimit: 5
+      downloadLimit: 5,
+      secured: false // true for secured assets
     },
     content_types: {
       dirName: 'content_types',
