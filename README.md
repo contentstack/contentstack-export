@@ -31,7 +31,15 @@ Update configuration details at config/index.js
  ...
 }
 ```
-    
+For switching to EU region update the hosts at config/default.js
+
+```js
+{
+  host:'https://eu-api.contentstack.com/v3',
+  cdn: 'https://eu-cdn.contentstack.com/v3',
+ ...
+}
+``` 
 ## Usage
 After setting the configuration, you'll can run the below given commands!
 
