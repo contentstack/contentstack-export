@@ -2,6 +2,9 @@ module.exports = {
   versioning: false,
   host: 'https://api.contentstack.io/v3',
   cdn: 'https://cdn.contentstack.io/v3',
+  // use below hosts for eu region
+  // host:'https://eu-api.contentstack.com/v3',
+  // cdn: 'https://eu-cdn.contentstack.com/v3',
   modules: {
     types: [
       'stack',
