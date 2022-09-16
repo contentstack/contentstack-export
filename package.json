@@ -9,7 +9,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "bluebird": "3.5.1",
+    "bluebird": "3.7.2",
     "lodash": "4.17.2",
     "mkdirp": "0.5.1",
     "request": "2.88.0",
