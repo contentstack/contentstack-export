@@ -13,7 +13,7 @@
     "lodash": "4.17.2",
     "mkdirp": "0.5.1",
     "request": "2.88.0",
-    "winston": "2.2.0",
+    "winston": "3.8.1",
     "debug": "4.1.0"
   },
   "main": "app.js",
