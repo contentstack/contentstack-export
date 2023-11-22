@@ -1,6 +1,6 @@
 # Deprecation Warning
 
-This utility has been deprecated. Use Contentstack CLI instead [CLI](https://github.com/contentstack/cli)
+The export utility has been deprecated. We will soon stop supporting this utility. We recommend you to use [Contentstack CLI](https://github.com/contentstack/cli) instead.
 
 ## Contentstack Export Utility
 
