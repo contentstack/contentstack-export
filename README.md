@@ -28,6 +28,7 @@ Update configuration details at config/index.js
  access_token: '' // Stack access_token
  management_token: '' //Stack management_token
  data: '' // Relative path to the directory, where exported data is to be stored. ex: './contents'
+ environment: '' // The environment for which you want to export assets and entries. Leave blank to export for all environments.
  ...
 }
 ```
