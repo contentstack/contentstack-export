@@ -1,5 +1,7 @@
 # Contentstack Export Utility
 
+**Note**: The contentstack-export command-line utility will soon be deprecated. We recommend you to check out our latest [CLI documentation](https://www.contentstack.com/docs/developers/cli) for performing content management activities.
+
 Contentstack is a headless CMS with an API-first approach that puts content at the centre. It is designed to simplify the process of publication by separating code from content.
 
 This utility helps you to export content from Contentstack. The data is exported in JSON format and stored in file system.
