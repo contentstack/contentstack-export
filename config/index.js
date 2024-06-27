@@ -8,9 +8,9 @@ module.exports = {
   email: '',   // (optional)
   password: '', // (optional)
   // Stack API KEY
-  source_stack: 'blt5fc1c50e99b24d80',             // mandatory
-  access_token: 'blt68a2c1bcfd650274',
+  source_stack: '',             // mandatory
+  access_token: '',
   management_token: '',    
   // Path where the exported data will be stored (relative path)
-  data: '/Users/raj.pandey/Documents/deprecationRepo/cleanRepo/contentstack-export/exportedContent/contents'
+  data: './contents'
 };
