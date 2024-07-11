@@ -5,8 +5,15 @@ var login = require('./lib/util/login');
 var config = require('./config');
 var log = require('./lib/util/log');
 const conf = require('./config/default');
-config = util.buildAppConfig(config)
-let validate = util.validateConfig(config)
+
+function isValid(input) {
+  const regex = /^[a-zA-Z0-9_]+$/;
+  return regex.test(input);
+}
+
+config = util.buildAppConfig(config);
+let validate = util.validateConfig(config);
+
 validate.then(() => {
   intialProcess().then(() => {
     return
@@ -29,7 +36,7 @@ async function intialProcess() {
       if (process.argv.length === 3) {
         var val = process.argv[2];
 
-        if (val && types.indexOf(val) > -1) {
+        if (val && isValid(val) && types.indexOf(val) > -1) {
             var exportedModule = require("./lib/export/" + conf.modules.types.includes(val)?val:'');
             return exportedModule.start().then(function () {
             log.success(val + ' was exported successfully!');
