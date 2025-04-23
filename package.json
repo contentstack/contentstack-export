@@ -12,9 +12,9 @@
     "bluebird": "3.7.2",
     "lodash": "4.17.21",
     "mkdirp": "1.0.4",
-    "request": "2.88.0",
+    "request": "2.88.2",
     "winston": "2.4.7",
-    "debug": "4.3.7"
+    "debug": "4.4.0"
   },
   "main": "app.js",
   "maintainers": [
