@@ -1,6 +1,6 @@
 {
   "name": "contentstack-export",
-  "version": "1.6.4",
+  "version": "1.6.5",
   "description": "Exports Contentstack's stack contents",
   "homepage": "https://www.contentstack.com/docs/tools-and-frameworks/content-migration/within-contentstack",
   "author": {
@@ -12,9 +12,9 @@
     "bluebird": "3.7.2",
     "lodash": "4.17.21",
     "mkdirp": "1.0.4",
-    "request": "2.88.0",
-    "winston": "2.2.0",
-    "debug": "4.3.5"
+    "request": "2.88.2",
+    "winston": "2.4.7",
+    "debug": "4.4.0"
   },
   "main": "app.js",
   "maintainers": [
