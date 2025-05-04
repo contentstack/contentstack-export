@@ -1,4 +1,8 @@
-# Contentstack Export Utility
+# Deprecation Warning
+
+The export utility has been deprecated. We will soon stop supporting this utility. We recommend you to use [Contentstack CLI](https://github.com/contentstack/cli) instead.
+
+## Contentstack Export Utility
 
 **Note**: The contentstack-export command-line utility will soon be deprecated. We recommend you to check out our latest [CLI documentation](https://www.contentstack.com/docs/developers/cli) for performing content management activities.
 
@@ -33,6 +37,7 @@ Update configuration details at config/index.js
  ...
 }
 ```
+
 For switching to EU region update the hosts at config/default.js
 
 ```js
@@ -41,8 +46,10 @@ For switching to EU region update the hosts at config/default.js
   cdn: 'https://eu-cdn.contentstack.com/v3',
  ...
 }
-``` 
+```
+
 ## Usage
+
 After setting the configuration, you'll can run the below given commands!
 
 1. Export all modules [ assets, locales, environments, extensions, webhooks, global_fields, content_types and entries, labels ]
@@ -50,8 +57,9 @@ After setting the configuration, you'll can run the below given commands!
 ```bash
 $ npm run export
 ```
-  
+
 2. Export a specific module
+
 ```bash
 $ npm run export-assets
 $ npm run export-env
@@ -64,17 +72,20 @@ $ npm run export-entries
 $ npm run export-labels
 
 ```
+
 > Note: Before exporting entries, you must export locales, assets and content types.
 
 > Note: If you keep the value of preserveStackVersion to true, then you will have to provide the email and password mandatorily in the config file, the management token will not work in that case.
 
 ### Known Limitations and Issues
-* If 2 assets share same uid and filename, only the first version of the asset would be available
-* Does not support the following
-	* Roles
-	* Users
-	* Releases
-    * Workflow
+
+- If 2 assets share same uid and filename, only the first version of the asset would be available
+- Does not support the following
+  - Roles
+  - Users
+  - Releases
+    - Workflow
 
 ## License
+
 This project is licensed under MIT license
